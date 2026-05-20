@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:MetryxWPF"
         xmlns:hс="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="624" Width="1237"
+        WindowState="Maximized">
     <Grid Background="#FFE0E0E0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -60,7 +61,7 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" MinHeight="58"/>
-                            <RowDefinition MaxHeight="40"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto" MinHeight="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
@@ -76,52 +77,32 @@
                         </Canvas>
                         <Button x:Name="AddButton" Grid.Column="1" Grid.Row="1" 
                                 Foreground="White" Background="#030213"
-                                Width="90" Height="30" Click="AddButton_Click"
-                                Margin="0, 0, 10, 0" hс:BorderElement.CornerRadius="7">
+                                Width="120" Height="40" Click="AddButton_Click"
+                                Margin="0, 0, 10, 10" hс:BorderElement.CornerRadius="7"
+                                FontSize="15">
                             + Добавить
                         </Button>
                         <Grid Grid.Row="2" Grid.Column="0">
-                            <!--<Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>-->
                             <TextBox x:Name="Search" Margin="14,0,14,0" 
                                      Grid.Column="1" Height="30"
                                      VerticalAlignment="Top" Background="#FFE0E0E0"
                                      hс:BorderElement.CornerRadius="7" HorizontalScrollBarVisibility="Disabled"
-                                     VerticalScrollBarVisibility="Disabled"
+                                     VerticalScrollBarVisibility="Disabled" BorderBrush="#c7c7c9"
                                      TextChanged="Search_TextChanged">
                             </TextBox>
-                            
-                            <!--<ComboBox x:Name="SearchParameter" Grid.Column="0" hс:BorderElement.CornerRadius="7" 
-                                      Background="#FFE0E0E0" BorderThickness="0"
-                                      Margin="14, 0, 0, 0">
-                                <ComboBoxItem>
-                                    Наименование
-                                </ComboBoxItem>
-                                <ComboBoxItem>
-                                    Заводской номер
-                                </ComboBoxItem>
-                            </ComboBox>
-                            <Button Click="SearchButton_Click" Grid.Column="2" hс:BorderElement.CornerRadius="7" 
-                                    Background="#030213" Foreground="White"
-                                    Margin="0, 0, 14, 0">
-                                Поиск
-                            </Button>-->
                         </Grid>
                         <Grid Grid.Row="2" Grid.Column="1">
                             <ComboBox x:Name="filters" Margin="0, 0, 10, 0"  
                                       hс:BorderElement.CornerRadius="7" Background="#FFE0E0E0" 
-                                      BorderThickness="0" SelectionChanged="filtersType_SelectionChanged"
-                                      DisplayMemberPath="Name"
+                                      BorderThickness="1" SelectionChanged="filtersType_SelectionChanged"
+                                      DisplayMemberPath="Name" BorderBrush="#c7c7c9"
                                       SelectedValuePath="Id">
                             </ComboBox>
                         </Grid>
                         <DataGrid x:Name="AllDevicesGrid" Grid.Row="3" Grid.ColumnSpan="2" Background="White"
                                   LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 10, 10, 20"
-                                  FontSize="15" Padding="0" GridLinesVisibility="All" HorizontalGridLinesBrush="Black"
-                                  VerticalGridLinesBrush="Black" ColumnWidth="SizeToHeader"
+                                  FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
+                                  ColumnWidth="SizeToHeader"
                                   AutoGenerateColumns="False">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="№"
