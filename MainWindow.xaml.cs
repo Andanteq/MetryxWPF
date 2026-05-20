@@ -57,7 +57,6 @@ public partial class MainWindow : Window
 
     private List<MeasurementDeviceView> GetSearchedDevices(string searchQuery)
     {
-        //List<MeasurementDeviceView> searchedDevices = new List<MeasurementDeviceView>();
         using (PostgresContext db = new PostgresContext())
         {
             return db.Measurementdevices
@@ -75,41 +74,7 @@ public partial class MainWindow : Window
                          Nextverificationdate = d.Nextverificationdate
                      })
                      .ToList();
-            /*switch (p)
-            {
-                case 0:
-                    searchedDevices = db.Measurementdevices
-                     .Include(d => d.Type)
-                     .Where(d => d.Name == searchQuery)
-                     .Select(d => new MeasurementDeviceView
-                     {
-                         Name = d.Name,
-                         TypeName = d.Type.Name,
-                         Serialnumber = d.Serialnumber,
-                         Verificationinterval = d.Verificationinterval,
-                         Lastverificationdate = d.Lastverificationdate,
-                         Nextverificationdate = d.Nextverificationdate
-                     })
-                     .ToList();
-                    break;
-                case 1:
-                    searchedDevices = db.Measurementdevices
-                     .Include(d => d.Type)
-                     .Where(d => d.Serialnumber == searchQuery)
-                     .Select(d => new MeasurementDeviceView
-                     {
-                         Name = d.Name,
-                         TypeName = d.Type.Name,
-                         Serialnumber = d.Serialnumber,
-                         Verificationinterval = d.Verificationinterval,
-                         Lastverificationdate = d.Lastverificationdate,
-                         Nextverificationdate = d.Nextverificationdate
-                     })
-                     .ToList();
-                    break;
-            }*/
         }
-        //return searchedDevices;
     }
 
     private void AllDevicesGrid_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -119,7 +84,9 @@ public partial class MainWindow : Window
 
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
-
+        AddDeviceWindow addDeviceWindow = new AddDeviceWindow();
+        addDeviceWindow.Owner = this;
+        addDeviceWindow.ShowDialog();
     }
 
     private void filtersType_SelectionChanged(object sender, SelectionChangedEventArgs e)
