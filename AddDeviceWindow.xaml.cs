@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore;
 
 namespace MetryxWPF
 {
@@ -22,12 +23,34 @@ namespace MetryxWPF
         public AddDeviceWindow()
         {
             InitializeComponent();
+
+            using (PostgresContext db = new PostgresContext())
+            {
+                var types = db.Devicetypes
+                            .Select(t => new Devicetype { Id = t.Id, Name = t.Name })
+                            .ToList();
+
+                DeviceType.ItemsSource = types;
+            }
         }
 
         //Добавление записи в БД
         public void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            using (PostgresContext db = new PostgresContext())
+            {
+                var newDevice = new Measurementdevice
+                {
+                    Name = DeviceName.Text,
+                    Typeid = (long)DeviceType.SelectedValue,
+                    Serialnumber = DeviceSerialNumber.Text,
+                    Releasedate = DateOnly.FromDateTime(DeviceReleaseDate.SelectedDate.Value.Date),
+                    Lastverificationdate = DateOnly.FromDateTime(DeviceLastverificationDate.SelectedDate.Value.Date)
+                };
+                db.Measurementdevices.Add(newDevice);
+                db.SaveChanges();
+            }
+            Close();
         }
 
         //Закрыть окно

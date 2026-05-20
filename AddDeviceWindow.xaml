@@ -56,7 +56,9 @@
             </TextBlock>
             <ComboBox x:Name="DeviceType" Margin="14, 0, 14, 0" 
                       hc:BorderElement.CornerRadius="7" 
-                      BorderBrush="#c7c7c9" Background="#FFE0E0E0">
+                      BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Id">
             </ComboBox>
         </StackPanel>
         <StackPanel Grid.Row="3">
