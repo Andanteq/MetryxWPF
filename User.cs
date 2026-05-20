@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace MetryxWPF;
+
+public partial class User
+{
+    public long Id { get; set; }
+
+    public string Username { get; set; } = null!;
+
+    public string Passwordhash { get; set; } = null!;
+
+    public string? Phonenumber { get; set; }
+
+    public long Roleid { get; set; }
+
+    public string Lastname { get; set; } = null!;
+
+    public string Firstname { get; set; } = null!;
+
+    public string? Middlename { get; set; }
+
+    public virtual ICollection<Measurementdevice> Measurementdevices { get; set; } = new List<Measurementdevice>();
+
+    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
+    public virtual Role Role { get; set; } = null!;
+}

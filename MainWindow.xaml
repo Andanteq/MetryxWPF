@@ -1,0 +1,165 @@
+﻿<Window x:Class="MetryxWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MetryxWPF"
+        xmlns:hс="https://handyorg.github.io/handycontrol"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Background="#FFE0E0E0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Metryx"
+                   FontSize="32"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   Panel.ZIndex="1" Margin="48,0,0,0" Grid.ColumnSpan="2"/>
+        <Border Height="1"
+                Width="160"
+                Background="#FFD0D0D0"
+                Margin="30,70,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Panel.ZIndex="2" Grid.ColumnSpan="2"/>
+
+        <TabControl BorderThickness="0" x:Name="MainTabControl" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Left" Grid.RowSpan="2">
+            <TabItem  Width="200" Margin="0,83,0,-81">
+                <TabItem.Header>
+                    <TextBlock FontSize="20" Padding="10,5">Главная</TextBlock>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" MinHeight="58"/>
+                        <RowDefinition Height="Auto" MinHeight="28"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Canvas Grid.Row="0">
+                        <TextBlock FontSize="20" Canvas.Left="14" Canvas.Top="30">Главная</TextBlock>
+                    </Canvas>
+                    <Canvas Grid.Row="1">
+                        <TextBlock FontSize="15" Foreground="#FFB4C0D5" Canvas.Left="14" Canvas.Top="4">Приборы, требующие поверки в ближайшее время</TextBlock>
+                    </Canvas>
+                    <Canvas x:Name="AlertDevices" Grid.Row="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem Width="200" Margin="0,83,0,-81">
+                <TabItem.Header>
+                    <TextBlock FontSize="20" Padding="10,5">База приборов</TextBlock>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" MinHeight="58"/>
+                            <RowDefinition MaxHeight="40"/>
+                            <RowDefinition Height="Auto" MinHeight="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+                        <Canvas Grid.Row="0" Grid.Column="0">
+                            <TextBlock FontSize="20" Canvas.Left="14" Canvas.Top="30">База приборов</TextBlock>
+                        </Canvas>
+                        <Canvas Grid.Row="1" Grid.Column="0">
+                            <TextBlock FontSize="15" Canvas.Left="14" Canvas.Top="4" Foreground="#FFB4C0D5">Полный список средств измерений</TextBlock>
+                        </Canvas>
+                        <Button x:Name="AddButton" Grid.Column="1" Grid.Row="1" 
+                                Foreground="White" Background="#030213"
+                                Width="90" Height="30" Click="AddButton_Click"
+                                Margin="0, 0, 10, 0" hс:BorderElement.CornerRadius="7">
+                            + Добавить
+                        </Button>
+                        <Grid Grid.Row="2" Grid.Column="0">
+                            <!--<Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>-->
+                            <TextBox x:Name="Search" Margin="14,0,14,0" 
+                                     Grid.Column="1" Height="30"
+                                     VerticalAlignment="Top" Background="#FFE0E0E0"
+                                     hс:BorderElement.CornerRadius="7" HorizontalScrollBarVisibility="Disabled"
+                                     VerticalScrollBarVisibility="Disabled"
+                                     TextChanged="Search_TextChanged">
+                            </TextBox>
+                            
+                            <!--<ComboBox x:Name="SearchParameter" Grid.Column="0" hс:BorderElement.CornerRadius="7" 
+                                      Background="#FFE0E0E0" BorderThickness="0"
+                                      Margin="14, 0, 0, 0">
+                                <ComboBoxItem>
+                                    Наименование
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    Заводской номер
+                                </ComboBoxItem>
+                            </ComboBox>
+                            <Button Click="SearchButton_Click" Grid.Column="2" hс:BorderElement.CornerRadius="7" 
+                                    Background="#030213" Foreground="White"
+                                    Margin="0, 0, 14, 0">
+                                Поиск
+                            </Button>-->
+                        </Grid>
+                        <Grid Grid.Row="2" Grid.Column="1">
+                            <ComboBox x:Name="filters" Margin="0, 0, 10, 0"  
+                                      hс:BorderElement.CornerRadius="7" Background="#FFE0E0E0" 
+                                      BorderThickness="0" SelectionChanged="filtersType_SelectionChanged"
+                                      DisplayMemberPath="Name"
+                                      SelectedValuePath="Id">
+                            </ComboBox>
+                        </Grid>
+                        <DataGrid x:Name="AllDevicesGrid" Grid.Row="3" Grid.ColumnSpan="2" Background="White"
+                                  LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 10, 10, 20"
+                                  FontSize="15" Padding="0" GridLinesVisibility="All" HorizontalGridLinesBrush="Black"
+                                  VerticalGridLinesBrush="Black" ColumnWidth="SizeToHeader"
+                                  AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="№"
+                                                    Width="40"
+                                                    IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                                        Path=Header}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Наименование"
+                                                    Binding="{Binding Name}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Тип прибора"
+                                                    Binding="{Binding TypeName}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Заводской номер"
+                                                    Binding="{Binding Serialnumber}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Периодичность"
+                                                    Binding="{Binding Verificationinterval}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Последняя поверка"
+                                                    Binding="{Binding Lastverificationdate}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Следующая поверка"
+                                                    Binding="{Binding Nextverificationdate,
+                                                                      TargetNullValue='Не указана'}"
+                                                    Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
