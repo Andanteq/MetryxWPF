@@ -27,7 +27,7 @@
                    Panel.ZIndex="1" Margin="48,0,0,0" Grid.ColumnSpan="2"/>
         <Border Height="1"
                 Width="160"
-                Background="#FFD0D0D0"
+                Background="#707070"
                 Margin="30,70,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
@@ -48,7 +48,7 @@
                         <TextBlock FontSize="20" Canvas.Left="14" Canvas.Top="30">Главная</TextBlock>
                     </Canvas>
                     <Canvas Grid.Row="1">
-                        <TextBlock FontSize="15" Foreground="#FFB4C0D5" Canvas.Left="14" Canvas.Top="4">Приборы, требующие поверки в ближайшее время</TextBlock>
+                        <TextBlock FontSize="15" Foreground="#707070" Canvas.Left="14" Canvas.Top="4">Приборы, требующие поверки в ближайшее время</TextBlock>
                     </Canvas>
                     <Canvas x:Name="AlertDevices" Grid.Row="2"/>
                 </Grid>
@@ -73,7 +73,7 @@
                             <TextBlock FontSize="20" Canvas.Left="14" Canvas.Top="30">База приборов</TextBlock>
                         </Canvas>
                         <Canvas Grid.Row="1" Grid.Column="0">
-                            <TextBlock FontSize="15" Canvas.Left="14" Canvas.Top="4" Foreground="#FFB4C0D5">Полный список средств измерений</TextBlock>
+                            <TextBlock FontSize="15" Canvas.Left="14" Canvas.Top="4" Foreground="#707070">Полный список средств измерений</TextBlock>
                         </Canvas>
                         <Button x:Name="AddButton" Grid.Column="1" Grid.Row="1" 
                                 Foreground="White" Background="#030213"
@@ -92,7 +92,7 @@
                             </TextBox>
                         </Grid>
                         <Grid Grid.Row="2" Grid.Column="1">
-                            <ComboBox x:Name="filters" Margin="0, 0, 10, 0"  
+                            <ComboBox x:Name="filters" Margin="0, 0, 14, 0"  
                                       hс:BorderElement.CornerRadius="7" Background="#FFE0E0E0" 
                                       BorderThickness="1" SelectionChanged="filtersType_SelectionChanged"
                                       DisplayMemberPath="Name" BorderBrush="#c7c7c9"
@@ -100,7 +100,7 @@
                             </ComboBox>
                         </Grid>
                         <DataGrid x:Name="AllDevicesGrid" Grid.Row="3" Grid.ColumnSpan="2" Background="White"
-                                  LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 10, 10, 20"
+                                  LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 10, 14, 20"
                                   FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
                                   ColumnWidth="SizeToHeader"
                                   AutoGenerateColumns="False"

@@ -5,7 +5,7 @@ namespace MetryxWPF;
 
 public partial class Notification
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     public string Message { get; set; } = null!;
 
@@ -13,9 +13,9 @@ public partial class Notification
 
     public bool? Isread { get; set; }
 
-    public long Userid { get; set; }
+    public int Userid { get; set; }
 
-    public long? Measurementdeviceid { get; set; }
+    public int? Measurementdeviceid { get; set; }
 
     public virtual Measurementdevice? Measurementdevice { get; set; }
 

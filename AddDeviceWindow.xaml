@@ -26,15 +26,14 @@
                        Margin="14, 5, 14, 0" FontWeight="DemiBold">
                 Добавить прибор
             </TextBlock>
-            <TextBlock Grid.Row="1" FontSize="15" Foreground="#FFB4C0D5"
+            <TextBlock Grid.Row="1" FontSize="15" Foreground="#707070"
                        Margin="14, 4, 14, 5">
                 Заполните обязательные поля прибора
             </TextBlock>
             <Border Height="1"
                     Width="Auto"
                     Grid.Row="1"
-                    Background="#FFD0D0D0"
-                    HorizontalAlignment="Left"
+                    Background="#707070"
                     VerticalAlignment="Bottom"/>
         </Grid>
         <StackPanel Grid.Row="1">
@@ -58,8 +57,7 @@
                       hc:BorderElement.CornerRadius="7" 
                       BorderBrush="#c7c7c9" Background="#FFE0E0E0"
                       DisplayMemberPath="Name"
-                      SelectedValuePath="Id">
-            </ComboBox>
+                      SelectedValuePath="Id"/>
         </StackPanel>
         <StackPanel Grid.Row="3">
             <TextBlock FontSize="12" FontWeight="DemiBold" 

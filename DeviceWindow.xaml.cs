@@ -19,11 +19,16 @@ namespace MetryxWPF
     /// </summary>
     public partial class DeviceWindow : Window
     {
-        public DeviceWindow(MeasurementDeviceView device)
+        public DeviceWindow(Measurementdevice device)
         {
             InitializeComponent();
-            
             DataContext = device;
+
+            DeviceType.SelectedIndex = device.Typeid;
+        }
+        public void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

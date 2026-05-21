@@ -56,7 +56,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private List<MeasurementDeviceView> GetSearchedDevices(string searchQuery, long id)
+    private List<MeasurementDeviceView> GetSearchedDevices(string searchQuery, int id)
     {
         using (PostgresContext db = new PostgresContext())
         {
@@ -131,18 +131,18 @@ public partial class MainWindow : Window
         AddDeviceWindow addDeviceWindow = new AddDeviceWindow();
         if (addDeviceWindow.ShowDialog() == true)
         {
-            AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (long)filters.SelectedValue);
+            AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
         }
     }
 
     private void filtersType_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (long)filters.SelectedValue);
+        AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
     }
 
     private void Search_TextChanged(object sender, RoutedEventArgs e)
     {
-        AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (long)filters.SelectedValue);
+        AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
     }
 
     private void AllDevicesGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -157,8 +157,7 @@ public partial class MainWindow : Window
 
                 if (device != null)
                 {
-                    DeviceWindow window = new DeviceWindow();
-                    window.DataContext = device;
+                    DeviceWindow window = new DeviceWindow(device);
                     window.ShowDialog();
                 }
             }

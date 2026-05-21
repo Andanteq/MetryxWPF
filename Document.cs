@@ -5,15 +5,15 @@ namespace MetryxWPF;
 
 public partial class Document
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     public string Filename { get; set; } = null!;
 
     public string Filepath { get; set; } = null!;
 
-    public long? Verificationid { get; set; }
+    public int? Verificationid { get; set; }
 
-    public long? Measurementdeviceid { get; set; }
+    public int? Measurementdeviceid { get; set; }
 
     public virtual Measurementdevice? Measurementdevice { get; set; }
 

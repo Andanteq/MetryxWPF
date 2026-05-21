@@ -52,7 +52,7 @@ namespace MetryxWPF
                 newDevice = new Measurementdevice
                 {
                     Name = DeviceName.Text,
-                    Typeid = (long)DeviceType.SelectedValue,
+                    Typeid = (int)DeviceType.SelectedValue,
                     Serialnumber = DeviceSerialNumber.Text,
                     Releasedate = DateOnly.FromDateTime(DeviceReleaseDate.SelectedDate.Value.Date),
                     Lastverificationdate = DateOnly.FromDateTime(DeviceLastverificationDate.SelectedDate.Value.Date)
@@ -60,9 +60,8 @@ namespace MetryxWPF
                 db.Measurementdevices.Add(newDevice);
                 db.SaveChanges();
             }
-            var deviceWindow = new DeviceWindow();
+            var deviceWindow = new DeviceWindow(newDevice);
             deviceWindow.Owner = this.Owner;
-            deviceWindow.DataContext = newDevice;
             deviceWindow.Show();
             DialogResult = true;
         }
