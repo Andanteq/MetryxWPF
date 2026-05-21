@@ -19,9 +19,11 @@ namespace MetryxWPF
     /// </summary>
     public partial class DeviceWindow : Window
     {
-        public DeviceWindow()
+        public DeviceWindow(MeasurementDeviceView device)
         {
             InitializeComponent();
+            
+            DataContext = device;
         }
     }
 }

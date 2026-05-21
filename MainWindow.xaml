@@ -103,7 +103,8 @@
                                   LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 10, 10, 20"
                                   FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
                                   ColumnWidth="SizeToHeader"
-                                  AutoGenerateColumns="False">
+                                  AutoGenerateColumns="False"
+                                  MouseDoubleClick="AllDevicesGrid_MouseDoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="№"
                                                     Width="40"

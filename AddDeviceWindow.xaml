@@ -122,9 +122,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Foreground="White" Background="#030213"
-                    HorizontalAlignment="Stretch" Height="40" Click="AddButton_Click"
+                    HorizontalAlignment="Stretch" Height="40" Click="SaveButton_Click"
                     Margin="14, 0, 10, 10" hc:BorderElement.CornerRadius="7">
-                Добавить
+                Сохранить
             </Button>
             <Button Grid.Column="1" Foreground="Black" Background="#eceef2"
                     HorizontalAlignment="Stretch" Height="40" Click="CancelButton_Click"

@@ -44,6 +44,7 @@ public partial class MainWindow : Window
                      .Include(d => d.Type)
                      .Select(d => new MeasurementDeviceView
                      {
+                         Id = d.Id,
                          Name = d.Name,
                          TypeName = d.Type.Name,
                          Serialnumber = d.Serialnumber,
@@ -55,25 +56,68 @@ public partial class MainWindow : Window
         }
     }
 
-    private List<MeasurementDeviceView> GetSearchedDevices(string searchQuery)
+    private List<MeasurementDeviceView> GetSearchedDevices(string searchQuery, long id)
     {
         using (PostgresContext db = new PostgresContext())
         {
-            return db.Measurementdevices
-                     .Include(d => d.Type)
-                     .Where(d => 
-                        EF.Functions.ILike(d.Name, $"%{searchQuery}%") ||
-                        EF.Functions.ILike(d.Serialnumber, $"%{searchQuery}%"))
-                     .Select(d => new MeasurementDeviceView
-                     {
-                         Name = d.Name,
-                         TypeName = d.Type.Name,
-                         Serialnumber = d.Serialnumber,
-                         Verificationinterval = d.Verificationinterval,
-                         Lastverificationdate = d.Lastverificationdate,
-                         Nextverificationdate = d.Nextverificationdate
-                     })
-                     .ToList();
+            if(id > 0 && searchQuery.Length > 0)
+            {
+                return db.Measurementdevices
+                         .Include(d => d.Type)
+                         .Where(d =>
+                            (EF.Functions.ILike(d.Name, $"%{searchQuery}%") ||
+                            EF.Functions.ILike(d.Serialnumber, $"%{searchQuery}%")) &&
+                            d.Typeid == id)
+                         .Select(d => new MeasurementDeviceView
+                         {
+                             Id = d.Id,
+                             Name = d.Name,
+                             TypeName = d.Type.Name,
+                             Serialnumber = d.Serialnumber,
+                             Verificationinterval = d.Verificationinterval,
+                             Lastverificationdate = d.Lastverificationdate,
+                             Nextverificationdate = d.Nextverificationdate
+                         })
+                         .ToList();
+            }
+            if(id == 0 && searchQuery.Length > 0)
+            {
+                return db.Measurementdevices
+                         .Include(d => d.Type)
+                         .Where(d =>
+                            EF.Functions.ILike(d.Name, $"%{searchQuery}%") ||
+                            EF.Functions.ILike(d.Serialnumber, $"%{searchQuery}%"))
+                         .Select(d => new MeasurementDeviceView
+                         {
+                             Id = d.Id,
+                             Name = d.Name,
+                             TypeName = d.Type.Name,
+                             Serialnumber = d.Serialnumber,
+                             Verificationinterval = d.Verificationinterval,
+                             Lastverificationdate = d.Lastverificationdate,
+                             Nextverificationdate = d.Nextverificationdate
+                         })
+                         .ToList();
+            }
+            if (id > 0 && searchQuery.Length == 0)
+            {
+                return db.Measurementdevices
+                         .Where(d => d.Typeid == id)
+                         .Include(d => d.Type)
+                         .Select(d => new MeasurementDeviceView
+                         {
+                             Id = d.Id,
+                             Name = d.Name,
+                             TypeName = d.Type.Name,
+                             Serialnumber = d.Serialnumber,
+                             Verificationinterval = d.Verificationinterval,
+                             Lastverificationdate = d.Lastverificationdate,
+                             Nextverificationdate = d.Nextverificationdate
+                         })
+                         .ToList();
+            }
+            else
+                return GetDevices();
         }
     }
 
@@ -85,44 +129,39 @@ public partial class MainWindow : Window
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
         AddDeviceWindow addDeviceWindow = new AddDeviceWindow();
-        addDeviceWindow.Owner = this;
-        addDeviceWindow.ShowDialog();
+        if (addDeviceWindow.ShowDialog() == true)
+        {
+            AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (long)filters.SelectedValue);
+        }
     }
 
     private void filtersType_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var selectedTypeId = (long)filters.SelectedValue;
-
-        if (selectedTypeId == 0)
-        {
-            AllDevicesGrid.ItemsSource = GetDevices();
-        }
-        else
-        {
-            using (PostgresContext db = new PostgresContext())
-            {
-                AllDevicesGrid.ItemsSource = db.Measurementdevices
-                                            .Where(d => d.Typeid == selectedTypeId)
-                                            .Include(d => d.Type)
-                                            .Select(d => new MeasurementDeviceView
-                                            {
-                                                Name = d.Name,
-                                                TypeName = d.Type.Name,
-                                                Serialnumber = d.Serialnumber,
-                                                Verificationinterval = d.Verificationinterval,
-                                                Lastverificationdate = d.Lastverificationdate,
-                                                Nextverificationdate = d.Nextverificationdate
-                                            })
-                                            .ToList();
-            }
-        }
+        AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (long)filters.SelectedValue);
     }
 
     private void Search_TextChanged(object sender, RoutedEventArgs e)
     {
-        if (Search.Text.Length > 0)
-            AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text);
-        else
-            AllDevicesGrid.ItemsSource = GetDevices();
+        AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (long)filters.SelectedValue);
+    }
+
+    private void AllDevicesGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (AllDevicesGrid.SelectedItem is MeasurementDeviceView selectedDevice)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var device = db.Measurementdevices
+                    .Include(d => d.Type)
+                    .FirstOrDefault(d => d.Id == selectedDevice.Id);
+
+                if (device != null)
+                {
+                    DeviceWindow window = new DeviceWindow();
+                    window.DataContext = device;
+                    window.ShowDialog();
+                }
+            }
+        }
     }
 }

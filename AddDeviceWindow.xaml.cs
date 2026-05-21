@@ -35,11 +35,21 @@ namespace MetryxWPF
         }
 
         //Добавление записи в БД
-        public void AddButton_Click(object sender, RoutedEventArgs e)
+        public void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            if (DeviceName.Text == "" || DeviceName.Text == " " ||
+                DeviceSerialNumber.Text == "" || DeviceSerialNumber.Text == " " ||
+                DeviceType.SelectedValue == null || DeviceReleaseDate.SelectedDate == null ||
+                DeviceLastverificationDate.SelectedDate == null)
+            {
+                MessageBox.Show("Заполните все поля");
+                return;
+            }
+
+            Measurementdevice newDevice;
             using (PostgresContext db = new PostgresContext())
             {
-                var newDevice = new Measurementdevice
+                newDevice = new Measurementdevice
                 {
                     Name = DeviceName.Text,
                     Typeid = (long)DeviceType.SelectedValue,
@@ -50,13 +60,17 @@ namespace MetryxWPF
                 db.Measurementdevices.Add(newDevice);
                 db.SaveChanges();
             }
-            Close();
+            var deviceWindow = new DeviceWindow();
+            deviceWindow.Owner = this.Owner;
+            deviceWindow.DataContext = newDevice;
+            deviceWindow.Show();
+            DialogResult = true;
         }
 
         //Закрыть окно
         public void CancelButton_Click( object sender, RoutedEventArgs e)
         {
-            Close();
+            DialogResult = false;
         }
     }
 }
