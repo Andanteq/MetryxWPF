@@ -27,7 +27,7 @@
                 Добавить прибор
             </TextBlock>
             <TextBlock Grid.Row="1" FontSize="15" Foreground="#707070"
-                       Margin="14, 4, 14, 5">
+                       Margin="14, 5, 14, 5">
                 Заполните обязательные поля прибора
             </TextBlock>
             <Border Height="1"
