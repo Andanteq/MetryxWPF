@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,11 +27,65 @@ namespace MetryxWPF
             InitializeComponent();
             DataContext = device;
 
-            DeviceType.SelectedIndex = device.Typeid;
+            using (PostgresContext db = new PostgresContext())
+            {
+                var types = db.Devicetypes.ToList();
+
+                DeviceType.ItemsSource = types;
+            }
+
+            DeviceType.SelectedValue = device.Typeid;
+
+            DeviceReleaseDate.SelectedDate = device.Releasedate.ToDateTime(TimeOnly.MinValue);
+            DeviceLastVerificationDate.SelectedDate = device.Lastverificationdate.ToDateTime(TimeOnly.MinValue);
+            DeviceNextVerificationDate.SelectedDate = device.Nextverificationdate.HasValue ? device.Nextverificationdate.Value.ToDateTime(TimeOnly.MinValue) : null;
+            LoadDocuments();
         }
         public void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            if(DeviceName.Text == "" ||  DeviceName.Text == " " ||
+                DeviceType.SelectedValue == null || DeviceSerialnumber.Text == "" ||
+                DeviceSerialnumber.Text == " " || DeviceReleaseDate.SelectedDate == null ||
+                DeviceLastVerificationDate.SelectedDate == null)
+            {
+                MessageBox.Show("Заполните все обязательные поля");
+                return;
+            }
 
+            var device = DataContext as Measurementdevice;
+
+            using (PostgresContext db = new PostgresContext())
+            {
+                var existingDevice = db.Measurementdevices
+                    .First(d => d.Id == device.Id);
+
+                existingDevice.Name = DeviceName.Text;
+                existingDevice.Typeid = (int)DeviceType.SelectedValue;
+                existingDevice.Serialnumber = DeviceSerialnumber.Text;
+
+                existingDevice.Releasedate =
+                    DateOnly.FromDateTime(DeviceReleaseDate.SelectedDate.Value);
+
+                existingDevice.Lastverificationdate =
+                    DateOnly.FromDateTime(DeviceLastVerificationDate.SelectedDate.Value);
+
+                existingDevice.Verificationinterval =
+                    Convert.ToInt32(DeviceVerificationInterval.Text);
+
+                existingDevice.Nextverificationdate =
+                    DateOnly.FromDateTime(DeviceNextVerificationDate.SelectedDate.Value);
+
+                existingDevice.Installationlocation =
+                    DeviceInstallationLocation.Text;
+
+                existingDevice.Responsible =
+                    DeviceResponsible.Text;
+
+                existingDevice.Note =
+                    DeviceNote.Text;
+
+                db.SaveChanges();
+            }
         }
         public void UploadDocument_Click(object sender, RoutedEventArgs e)
         {
@@ -111,6 +166,14 @@ namespace MetryxWPF
             }
 
             LoadDocuments();
+        }
+
+        private void DeviceNextVerificationDate_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (DeviceVerificationInterval.Text != "" && DeviceVerificationInterval.Text != " ")
+                DeviceNextVerificationDate.SelectedDate = DeviceLastVerificationDate.SelectedDate.Value.AddMonths(Convert.ToInt32(DeviceVerificationInterval.Text));
+            else
+                MessageBox.Show("Введите межповерочный интервал");
         }
     }
 }

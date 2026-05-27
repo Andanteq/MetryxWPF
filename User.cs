@@ -20,10 +20,7 @@ public partial class User
     public string Firstname { get; set; } = null!;
 
     public string? Middlename { get; set; }
-    public string GetFullName()
-    {
-        return Lastname + " " + Firstname + " " + Middlename;
-    }
+    public string Fullname { get; set; } = null!;
 
     public virtual ICollection<Measurementdevice> Measurementdevices { get; set; } = new List<Measurementdevice>();
 

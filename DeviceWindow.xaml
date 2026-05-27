@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:MetryxWPF"
         xmlns:hс="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="DeviceWindow" Height="742" Width="833">
+        Title="DeviceWindow" Height="742" Width="833"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <ScrollViewer>
             <Grid>
@@ -28,7 +29,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="{Binding Name}"
                                FontSize="20" FontWeight="DemiBold"
-                               Margin="14, 5, 0, 0"/>
+                               Margin="14, 20, 0, 0"/>
                     <TextBlock Grid.Row="1" FontSize="15"
                                Foreground="#707070"
                                Margin="14, 5, 0, 5">
@@ -43,6 +44,7 @@
                         VerticalAlignment="Bottom"
                         Margin="14, 0, 0, 0"/>
                 <Button Grid.Row="0" Grid.Column="1"
+                        x:Name="SaveButton"
                         Foreground="White" Background="#030213"
                         Width="120" Height="40" Click="SaveButton_Click"
                         Margin="0, 0, 14, 0" hс:BorderElement.CornerRadius="7"
@@ -114,8 +116,7 @@
                                     BorderBrush="#c7c7c9"
                                     BorderThickness="1"
                                     Background="#FFE0E0E0"
-                                    IsDropDownOpen="False" SelectedDateFormat="Short"
-                                    SelectedDate="{Binding Releasedate}">
+                                    IsDropDownOpen="False" SelectedDateFormat="Short">
                             <DatePicker.Resources>
                                 <Style TargetType="Calendar">
                                     <Setter Property="Language" Value="ru-RU"/>
@@ -169,8 +170,7 @@
                                     BorderBrush="#c7c7c9"
                                     BorderThickness="1"
                                     Background="#FFE0E0E0"
-                                    IsDropDownOpen="False" SelectedDateFormat="Short"
-                                    SelectedDate="{Binding Lastverificationdate}">
+                                    IsDropDownOpen="False" SelectedDateFormat="Short">
                             <DatePicker.Resources>
                                 <Style TargetType="Calendar">
                                     <Setter Property="Language" Value="ru-RU"/>
@@ -193,7 +193,7 @@
                                     BorderThickness="1"
                                     Background="#FFE0E0E0"
                                     IsDropDownOpen="False" SelectedDateFormat="Short"
-                                    SelectedDate="{Binding Nextverificationdate}">
+                                    MouseDoubleClick="DeviceNextVerificationDate_MouseDoubleClick">
                             <DatePicker.Resources>
                                 <Style TargetType="Calendar">
                                     <Setter Property="Language" Value="ru-RU"/>
@@ -247,18 +247,18 @@
                                    Foreground="#707070">
                             Ответственное лицо
                         </TextBlock>
-                        <TextBox x:Name="DeviceUser" Margin="7, 4, 0, 0" 
+                        <TextBox x:Name="DeviceResponsible" Margin="7, 4, 0, 0" 
                                  hс:BorderElement.CornerRadius="7" 
                                  BorderBrush="#c7c7c9" Background="#FFE0E0E0"
-                                 Text="{Binding UserId.GetFullName}"/>
+                                 Text="{Binding Responsible}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
                         <TextBlock FontSize="12" FontWeight="DemiBold"
-                                   Margin="7, 15, 0, 0"
+                                   Margin="14, 15, 0, 0"
                                    Foreground="#707070">
                             Примечание
                         </TextBlock>
-                        <TextBox x:Name="DeviceNote" Margin="7, 4, 0, 0" 
+                        <TextBox x:Name="DeviceNote" Margin="14, 4, 0, 0" 
                                  hс:BorderElement.CornerRadius="7" 
                                  Height="70"
                                  BorderBrush="#c7c7c9" Background="#FFE0E0E0"
@@ -290,7 +290,7 @@
                     </Button>
                     <ListBox x:Name="DocumentsListBox"
                              Grid.Row="2"
-                             Margin="14, 10, 0, 0">
+                             Margin="14, 10, 0, 20">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,5">
@@ -299,7 +299,7 @@
                                         <ColumnDefinition Width="80"/>
                                         <ColumnDefinition Width="80"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding FileName}"
+                                    <TextBlock Text="{Binding Filename}"
                                                VerticalAlignment="Center"/>
                                     <Button Grid.Column="1"
                                             Content="Скачать"

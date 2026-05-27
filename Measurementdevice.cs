@@ -27,6 +27,8 @@ public partial class Measurementdevice
 
     public int? Userid { get; set; }
 
+    public string? Responsible {  get; set; }
+
     public string? Note { get; set; }
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:MetryxWPF"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="AddDeviceWindow" Height="600" Width="550" WindowStartupLocation="CenterOwner">
+        Title="AddDeviceWindow" Height="600" Width="550" 
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

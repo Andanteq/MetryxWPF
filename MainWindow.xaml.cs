@@ -22,6 +22,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         AllDevicesGrid.ItemsSource = GetDevices();
+        AllUsersGrid.ItemsSource = GetUsers();
 
         using (PostgresContext db = new PostgresContext())
         {
@@ -36,6 +37,7 @@ public partial class MainWindow : Window
         }
     }
 
+    #region База приборов
     private List<MeasurementDeviceView> GetDevices()
     {
         using (PostgresContext db = new PostgresContext())
@@ -159,8 +161,75 @@ public partial class MainWindow : Window
                 {
                     DeviceWindow window = new DeviceWindow(device);
                     window.ShowDialog();
+                    AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
                 }
             }
         }
     }
+    #endregion
+
+    #region Пользователи
+    private List<UsersView> GetUsers()
+    {
+        using(PostgresContext db = new PostgresContext())
+        {
+            return db.Users
+                   .Include(u => u.Role)
+                   .Select(u => new UsersView
+                   {
+                       Id = u.Id,
+                       Lastname = u.Lastname,
+                       Firstname = u.Firstname,
+                       Middlename = u.Middlename,
+                       RoleName = u.Role.Name,
+                       Phonenumber = u.Phonenumber
+                   })
+                   .ToList();
+        }
+    }
+    private List<UsersView> GetSearchedUsers(string searchQuery)
+    {
+        using(var db = new PostgresContext())
+        {
+            if (searchQuery.Length > 0)
+            {
+                return db.Users
+                       .Include(u => u.Role)
+                       .Where(u =>
+                            EF.Functions.ILike(u.Fullname, $"%{searchQuery}%") ||
+                            EF.Functions.ILike(u.Role.Name, $"%{searchQuery}%") ||
+                            EF.Functions.ILike(u.Phonenumber, $"%{searchQuery}%")
+                       )
+                       .Select(u => new UsersView
+                       {
+                           Id = u.Id,
+                           Lastname = u.Lastname,
+                           Firstname = u.Firstname,
+                           Middlename = u.Middlename,
+                           RoleName = u.Role.Name,
+                           Phonenumber = u.Phonenumber
+                       })
+                       .ToList();
+            }
+            else
+                return GetUsers();
+        }
+    }
+    private void AllUsersGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+    {
+        e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+    }
+    private void AddUserButton_Click(object sender, RoutedEventArgs e)
+    {
+        AddUserWindow addUserWindow = new AddUserWindow();
+        if (addUserWindow.ShowDialog() == true)
+        {
+            AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
+        }
+    }
+    private void UsersSearch_TextChanged(object sender, TextChangedEventArgs e) 
+    {
+        AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
+    }
+    #endregion
 }

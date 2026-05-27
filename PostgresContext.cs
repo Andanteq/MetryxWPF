@@ -103,6 +103,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Typeid).HasColumnName("typeid");
             entity.Property(e => e.Unsuitable).HasColumnName("unsuitable");
             entity.Property(e => e.Userid).HasColumnName("userid");
+            entity.Property(e => e.Responsible)
+                .HasColumnType("character varying")
+                .HasColumnName("responsible");
             entity.Property(e => e.Verificationinterval).HasColumnName("verificationinterval");
 
             entity.HasOne(d => d.Type).WithMany(p => p.Measurementdevices)
