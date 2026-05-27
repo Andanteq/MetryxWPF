@@ -5,7 +5,7 @@ namespace MetryxWPF;
 
 public partial class Verification
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     public DateOnly Verificationdate { get; set; }
 
@@ -15,7 +15,7 @@ public partial class Verification
 
     public bool? Unsuitable { get; set; }
 
-    public long Measurementdeviceid { get; set; }
+    public int Measurementdeviceid { get; set; }
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 

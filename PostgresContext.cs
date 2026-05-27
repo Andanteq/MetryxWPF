@@ -44,7 +44,7 @@ public partial class PostgresContext : DbContext
             entity.ToTable("devicetype");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Name).HasColumnType("character varying");
         });
@@ -56,7 +56,7 @@ public partial class PostgresContext : DbContext
             entity.ToTable("document");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Filename)
                 .HasColumnType("character varying")
@@ -83,7 +83,7 @@ public partial class PostgresContext : DbContext
             entity.ToTable("measurementdevice");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Installationlocation)
                 .HasColumnType("character varying")
@@ -103,6 +103,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Typeid).HasColumnName("typeid");
             entity.Property(e => e.Unsuitable).HasColumnName("unsuitable");
             entity.Property(e => e.Userid).HasColumnName("userid");
+            entity.Property(e => e.Responsible)
+                .HasColumnType("character varying")
+                .HasColumnName("responsible");
             entity.Property(e => e.Verificationinterval).HasColumnName("verificationinterval");
 
             entity.HasOne(d => d.Type).WithMany(p => p.Measurementdevices)
@@ -122,7 +125,7 @@ public partial class PostgresContext : DbContext
             entity.ToTable("notification");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Createdat).HasColumnName("createdat");
             entity.Property(e => e.Isread).HasColumnName("isread");
@@ -149,7 +152,7 @@ public partial class PostgresContext : DbContext
             entity.ToTable("role");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Name).HasColumnType("character varying");
         });
@@ -161,7 +164,7 @@ public partial class PostgresContext : DbContext
             entity.ToTable("user");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Firstname)
                 .HasColumnType("character varying")
@@ -196,7 +199,7 @@ public partial class PostgresContext : DbContext
             entity.ToTable("verification");
 
             entity.Property(e => e.Id)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Measurementdeviceid).HasColumnName("measurementdeviceid");
             entity.Property(e => e.Nextverificationdate).HasColumnName("nextverificationdate");

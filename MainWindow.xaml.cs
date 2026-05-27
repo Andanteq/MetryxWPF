@@ -22,6 +22,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         AllDevicesGrid.ItemsSource = GetDevices();
+        AllUsersGrid.ItemsSource = GetUsers();
 
         using (PostgresContext db = new PostgresContext())
         {
@@ -36,6 +37,7 @@ public partial class MainWindow : Window
         }
     }
 
+    #region База приборов
     private List<MeasurementDeviceView> GetDevices()
     {
         using (PostgresContext db = new PostgresContext())
@@ -44,6 +46,7 @@ public partial class MainWindow : Window
                      .Include(d => d.Type)
                      .Select(d => new MeasurementDeviceView
                      {
+                         Id = d.Id,
                          Name = d.Name,
                          TypeName = d.Type.Name,
                          Serialnumber = d.Serialnumber,
@@ -55,25 +58,68 @@ public partial class MainWindow : Window
         }
     }
 
-    private List<MeasurementDeviceView> GetSearchedDevices(string searchQuery)
+    private List<MeasurementDeviceView> GetSearchedDevices(string searchQuery, int id)
     {
         using (PostgresContext db = new PostgresContext())
         {
-            return db.Measurementdevices
-                     .Include(d => d.Type)
-                     .Where(d => 
-                        EF.Functions.ILike(d.Name, $"%{searchQuery}%") ||
-                        EF.Functions.ILike(d.Serialnumber, $"%{searchQuery}%"))
-                     .Select(d => new MeasurementDeviceView
-                     {
-                         Name = d.Name,
-                         TypeName = d.Type.Name,
-                         Serialnumber = d.Serialnumber,
-                         Verificationinterval = d.Verificationinterval,
-                         Lastverificationdate = d.Lastverificationdate,
-                         Nextverificationdate = d.Nextverificationdate
-                     })
-                     .ToList();
+            if(id > 0 && searchQuery.Length > 0)
+            {
+                return db.Measurementdevices
+                         .Include(d => d.Type)
+                         .Where(d =>
+                            (EF.Functions.ILike(d.Name, $"%{searchQuery}%") ||
+                            EF.Functions.ILike(d.Serialnumber, $"%{searchQuery}%")) &&
+                            d.Typeid == id)
+                         .Select(d => new MeasurementDeviceView
+                         {
+                             Id = d.Id,
+                             Name = d.Name,
+                             TypeName = d.Type.Name,
+                             Serialnumber = d.Serialnumber,
+                             Verificationinterval = d.Verificationinterval,
+                             Lastverificationdate = d.Lastverificationdate,
+                             Nextverificationdate = d.Nextverificationdate
+                         })
+                         .ToList();
+            }
+            if(id == 0 && searchQuery.Length > 0)
+            {
+                return db.Measurementdevices
+                         .Include(d => d.Type)
+                         .Where(d =>
+                            EF.Functions.ILike(d.Name, $"%{searchQuery}%") ||
+                            EF.Functions.ILike(d.Serialnumber, $"%{searchQuery}%"))
+                         .Select(d => new MeasurementDeviceView
+                         {
+                             Id = d.Id,
+                             Name = d.Name,
+                             TypeName = d.Type.Name,
+                             Serialnumber = d.Serialnumber,
+                             Verificationinterval = d.Verificationinterval,
+                             Lastverificationdate = d.Lastverificationdate,
+                             Nextverificationdate = d.Nextverificationdate
+                         })
+                         .ToList();
+            }
+            if (id > 0 && searchQuery.Length == 0)
+            {
+                return db.Measurementdevices
+                         .Where(d => d.Typeid == id)
+                         .Include(d => d.Type)
+                         .Select(d => new MeasurementDeviceView
+                         {
+                             Id = d.Id,
+                             Name = d.Name,
+                             TypeName = d.Type.Name,
+                             Serialnumber = d.Serialnumber,
+                             Verificationinterval = d.Verificationinterval,
+                             Lastverificationdate = d.Lastverificationdate,
+                             Nextverificationdate = d.Nextverificationdate
+                         })
+                         .ToList();
+            }
+            else
+                return GetDevices();
         }
     }
 
@@ -85,44 +131,105 @@ public partial class MainWindow : Window
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
         AddDeviceWindow addDeviceWindow = new AddDeviceWindow();
-        addDeviceWindow.Owner = this;
-        addDeviceWindow.ShowDialog();
+        if (addDeviceWindow.ShowDialog() == true)
+        {
+            AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
+        }
     }
 
     private void filtersType_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var selectedTypeId = (long)filters.SelectedValue;
-
-        if (selectedTypeId == 0)
-        {
-            AllDevicesGrid.ItemsSource = GetDevices();
-        }
-        else
-        {
-            using (PostgresContext db = new PostgresContext())
-            {
-                AllDevicesGrid.ItemsSource = db.Measurementdevices
-                                            .Where(d => d.Typeid == selectedTypeId)
-                                            .Include(d => d.Type)
-                                            .Select(d => new MeasurementDeviceView
-                                            {
-                                                Name = d.Name,
-                                                TypeName = d.Type.Name,
-                                                Serialnumber = d.Serialnumber,
-                                                Verificationinterval = d.Verificationinterval,
-                                                Lastverificationdate = d.Lastverificationdate,
-                                                Nextverificationdate = d.Nextverificationdate
-                                            })
-                                            .ToList();
-            }
-        }
+        AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
     }
 
     private void Search_TextChanged(object sender, RoutedEventArgs e)
     {
-        if (Search.Text.Length > 0)
-            AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text);
-        else
-            AllDevicesGrid.ItemsSource = GetDevices();
+        AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
     }
+
+    private void AllDevicesGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (AllDevicesGrid.SelectedItem is MeasurementDeviceView selectedDevice)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var device = db.Measurementdevices
+                    .Include(d => d.Type)
+                    .FirstOrDefault(d => d.Id == selectedDevice.Id);
+
+                if (device != null)
+                {
+                    DeviceWindow window = new DeviceWindow(device);
+                    window.ShowDialog();
+                    AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region Пользователи
+    private List<UsersView> GetUsers()
+    {
+        using(PostgresContext db = new PostgresContext())
+        {
+            return db.Users
+                   .Include(u => u.Role)
+                   .Select(u => new UsersView
+                   {
+                       Id = u.Id,
+                       Lastname = u.Lastname,
+                       Firstname = u.Firstname,
+                       Middlename = u.Middlename,
+                       RoleName = u.Role.Name,
+                       Phonenumber = u.Phonenumber
+                   })
+                   .ToList();
+        }
+    }
+    private List<UsersView> GetSearchedUsers(string searchQuery)
+    {
+        using(var db = new PostgresContext())
+        {
+            if (searchQuery.Length > 0)
+            {
+                return db.Users
+                       .Include(u => u.Role)
+                       .Where(u =>
+                            EF.Functions.ILike(u.Fullname, $"%{searchQuery}%") ||
+                            EF.Functions.ILike(u.Role.Name, $"%{searchQuery}%") ||
+                            EF.Functions.ILike(u.Phonenumber, $"%{searchQuery}%")
+                       )
+                       .Select(u => new UsersView
+                       {
+                           Id = u.Id,
+                           Lastname = u.Lastname,
+                           Firstname = u.Firstname,
+                           Middlename = u.Middlename,
+                           RoleName = u.Role.Name,
+                           Phonenumber = u.Phonenumber
+                       })
+                       .ToList();
+            }
+            else
+                return GetUsers();
+        }
+    }
+    private void AllUsersGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+    {
+        e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+    }
+    private void AddUserButton_Click(object sender, RoutedEventArgs e)
+    {
+        AddUserWindow addUserWindow = new AddUserWindow();
+        if (addUserWindow.ShowDialog() == true)
+        {
+            AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
+        }
+    }
+    private void UsersSearch_TextChanged(object sender, TextChangedEventArgs e) 
+    {
+        AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
+    }
+    #endregion
 }

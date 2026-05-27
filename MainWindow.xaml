@@ -27,14 +27,14 @@
                    Panel.ZIndex="1" Margin="48,0,0,0" Grid.ColumnSpan="2"/>
         <Border Height="1"
                 Width="160"
-                Background="#FFD0D0D0"
+                Background="#707070"
                 Margin="30,70,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Panel.ZIndex="2" Grid.ColumnSpan="2"/>
 
         <TabControl BorderThickness="0" x:Name="MainTabControl" Grid.Column="0" Grid.ColumnSpan="2" TabStripPlacement="Left" Grid.RowSpan="2">
-            <TabItem  Width="200" Margin="0,83,0,-81">
+            <TabItem  Width="200" Margin="0,83,0,-83">
                 <TabItem.Header>
                     <TextBlock FontSize="20" Padding="10,5">Главная</TextBlock>
                 </TabItem.Header>
@@ -48,12 +48,12 @@
                         <TextBlock FontSize="20" Canvas.Left="14" Canvas.Top="30">Главная</TextBlock>
                     </Canvas>
                     <Canvas Grid.Row="1">
-                        <TextBlock FontSize="15" Foreground="#FFB4C0D5" Canvas.Left="14" Canvas.Top="4">Приборы, требующие поверки в ближайшее время</TextBlock>
+                        <TextBlock FontSize="15" Foreground="#707070" Canvas.Left="14" Canvas.Top="10">Приборы, требующие поверки в ближайшее время</TextBlock>
                     </Canvas>
                     <Canvas x:Name="AlertDevices" Grid.Row="2"/>
                 </Grid>
             </TabItem>
-            <TabItem Width="200" Margin="0,83,0,-81">
+            <TabItem Width="200" Margin="0,83,0,-83">
                 <TabItem.Header>
                     <TextBlock FontSize="20" Padding="10,5">База приборов</TextBlock>
                 </TabItem.Header>
@@ -70,10 +70,16 @@
                             <ColumnDefinition Width="200"/>
                         </Grid.ColumnDefinitions>
                         <Canvas Grid.Row="0" Grid.Column="0">
-                            <TextBlock FontSize="20" Canvas.Left="14" Canvas.Top="30">База приборов</TextBlock>
+                            <TextBlock FontSize="20" Canvas.Left="14" 
+                                       Canvas.Top="30" FontWeight="DemiBold">
+                                База приборов
+                            </TextBlock>
                         </Canvas>
                         <Canvas Grid.Row="1" Grid.Column="0">
-                            <TextBlock FontSize="15" Canvas.Left="14" Canvas.Top="4" Foreground="#FFB4C0D5">Полный список средств измерений</TextBlock>
+                            <TextBlock FontSize="15" Canvas.Left="14" 
+                                       Canvas.Top="10" Foreground="#707070">
+                                Полный список средств измерений
+                            </TextBlock>
                         </Canvas>
                         <Button x:Name="AddButton" Grid.Column="1" Grid.Row="1" 
                                 Foreground="White" Background="#030213"
@@ -92,7 +98,7 @@
                             </TextBox>
                         </Grid>
                         <Grid Grid.Row="2" Grid.Column="1">
-                            <ComboBox x:Name="filters" Margin="0, 0, 10, 0"  
+                            <ComboBox x:Name="filters" Margin="0, 0, 14, 0"  
                                       hс:BorderElement.CornerRadius="7" Background="#FFE0E0E0" 
                                       BorderThickness="1" SelectionChanged="filtersType_SelectionChanged"
                                       DisplayMemberPath="Name" BorderBrush="#c7c7c9"
@@ -100,10 +106,11 @@
                             </ComboBox>
                         </Grid>
                         <DataGrid x:Name="AllDevicesGrid" Grid.Row="3" Grid.ColumnSpan="2" Background="White"
-                                  LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 10, 10, 20"
+                                  LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 10, 14, 20"
                                   FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
                                   ColumnWidth="SizeToHeader"
-                                  AutoGenerateColumns="False">
+                                  AutoGenerateColumns="False"
+                                  MouseDoubleClick="AllDevicesGrid_MouseDoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="№"
                                                     Width="40"
@@ -135,6 +142,85 @@
                                 <DataGridTextColumn Header="Следующая поверка"
                                                     Binding="{Binding Nextverificationdate,
                                                                       TargetNullValue='Не указана'}"
+                                                    Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="Users" Margin="0, 83, 0, -83">
+                <TabItem.Header>
+                    <TextBlock FontSize="20" Padding="10,5">Пользователи</TextBlock>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="20" FontWeight="DemiBold"
+                                   Margin="14, 30, 0, 0" Grid.Row="0">
+                            Пользователи
+                        </TextBlock>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="200"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="15" Foreground="#707070"
+                                       Margin="14, 10, 0 ,0" Grid.Column="0">
+                                    Управление пользователями системы
+                            </TextBlock>
+                            <Button x:Name="AddUserButton" Grid.Column="1" 
+                                    Foreground="White" Background="#030213"
+                                    Width="120" Height="40" Click="AddUserButton_Click"
+                                    Margin="0, 0, 10, 10" hс:BorderElement.CornerRadius="7"
+                                    FontSize="15">
+                                + Добавить
+                            </Button>
+                        </Grid>
+                        <TextBox x:Name="UsersSearch" Margin="14,0,45,0" 
+                                 Grid.Row="2" Height="30"
+                                 VerticalAlignment="Top" Background="#FFE0E0E0"
+                                 hс:BorderElement.CornerRadius="7" HorizontalScrollBarVisibility="Disabled"
+                                 VerticalScrollBarVisibility="Disabled" BorderBrush="#c7c7c9"
+                                 TextChanged="UsersSearch_TextChanged">
+                        </TextBox>
+                        <DataGrid x:Name="AllUsersGrid" Grid.Row="3" Grid.ColumnSpan="2" Background="White"
+                                  LoadingRow="AllUsersGrid_LoadingRow" Margin="14, 10, 45, 20"
+                                  FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
+                                  ColumnWidth="SizeToHeader"
+                                  AutoGenerateColumns="False"
+                                  MouseDoubleClick="AllUsersGrid_MouseDoubleClick">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="№"
+                                                        Width="40"
+                                                        IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                                        Path=Header}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Фамилия"
+                                                    Binding="{Binding LastName}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Имя"
+                                                    Binding="{Binding FirstName}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Отчество"
+                                                    Binding="{Binding MiddleName}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Роль"
+                                                    Binding="{Binding RoleName}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Номер телефона"
+                                                    Binding="{Binding Phonenumber}"
                                                     Width="*"/>
                             </DataGrid.Columns>
                         </DataGrid>

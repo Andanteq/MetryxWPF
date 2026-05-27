@@ -5,11 +5,11 @@ namespace MetryxWPF;
 
 public partial class Measurementdevice
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public long Typeid { get; set; }
+    public int Typeid { get; set; }
 
     public string Serialnumber { get; set; } = null!;
 
@@ -25,7 +25,9 @@ public partial class Measurementdevice
 
     public string? Installationlocation { get; set; }
 
-    public long? Userid { get; set; }
+    public int? Userid { get; set; }
+
+    public string? Responsible {  get; set; }
 
     public string? Note { get; set; }
 
