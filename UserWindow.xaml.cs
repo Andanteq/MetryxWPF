@@ -14,22 +14,11 @@ using System.Windows.Shapes;
 
 namespace MetryxWPF
 {
-    /// <summary>
-    /// Логика взаимодействия для AuthWindow.xaml
-    /// </summary>
-    public partial class AuthWindow : Window
+    public partial class UserWindow : Window
     {
-        public AuthWindow()
+        public UserWindow()
         {
             InitializeComponent();
-        }
-        private void AuthButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -221,8 +221,8 @@ public partial class MainWindow : Window
     }
     private void AddUserButton_Click(object sender, RoutedEventArgs e)
     {
-        AddUserWindow addUserWindow = new AddUserWindow();
-        if (addUserWindow.ShowDialog() == true)
+        UserWindow UserWindow = new UserWindow();
+        if (UserWindow.ShowDialog() == true)
         {
             AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
         }
@@ -230,6 +230,10 @@ public partial class MainWindow : Window
     private void UsersSearch_TextChanged(object sender, TextChangedEventArgs e) 
     {
         AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
+    }
+    private void AllUsersGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+
     }
     #endregion
 }
