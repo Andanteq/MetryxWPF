@@ -226,7 +226,8 @@
                             Background="#707070"
                             VerticalAlignment="Bottom"
                             Margin="14, 0, 0, 0"/>
-                    <CheckBox Grid.Row="1" Grid.Column="0"
+                    <CheckBox x:Name="Unsuitable"
+                              Grid.Row="1" Grid.Column="0"
                               Margin="14, 15, 0, 0"
                               IsThreeState="False" FontWeight="DemiBold"
                               Height="20" Content="Непригодный"/>

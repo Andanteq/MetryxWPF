@@ -208,13 +208,13 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Header="Фамилия"
-                                                    Binding="{Binding LastName}"
+                                                    Binding="{Binding Lastname}"
                                                     Width="*"/>
                                 <DataGridTextColumn Header="Имя"
-                                                    Binding="{Binding FirstName}"
+                                                    Binding="{Binding Firstname}"
                                                     Width="*"/>
                                 <DataGridTextColumn Header="Отчество"
-                                                    Binding="{Binding MiddleName}"
+                                                    Binding="{Binding Middlename}"
                                                     Width="*"/>
                                 <DataGridTextColumn Header="Роль"
                                                     Binding="{Binding RoleName}"

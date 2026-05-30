@@ -6,13 +6,193 @@
         xmlns:local="clr-namespace:MetryxWPF"
         xmlns:hс="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="UserWindow" Height="450" Width="800">
+        Title="UserWindow" Height="500" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="130"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       FontSize="20" FontWeight="DemiBold"
+                       Margin="14, 20, 0, 0">
+                <Run Text="{Binding Lastname}"/>
+                <Run Text="{Binding Firstname}"/>
+                <Run Text="{Binding Middlename}"/>
+            </TextBlock>
+            <TextBlock Grid.Row="1" FontSize="15"
+                       Foreground="#707070"
+                       Margin="14, 5, 0, 5"
+                       Text="{Binding Phonenumber}">
+            </TextBlock>
+        </Grid>
+        <Border Height="1"
+                Grid.Row="0" Grid.ColumnSpan="2"
+                Background="#707070"
+                VerticalAlignment="Bottom"
+                Margin="14, 0, 0, 0"/>
+        <Button Grid.Row="0" Grid.Column="1"
+                x:Name="SaveButton"
+                Foreground="White" Background="#030213"
+                Width="120" Height="40" Click="SaveButton_Click"
+                Margin="0, 0, 14, 0" hс:BorderElement.CornerRadius="7"
+                FontSize="15">
+            Сохранить
+        </Button>
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       Grid.ColumnSpan="3"
+                       FontSize="20" FontWeight="DemiBold"
+                       Margin="14, 10, 0, 10">
+                Персональная информация
+            </TextBlock>
+            <Border Height="1"
+                    Grid.Row="0" Grid.ColumnSpan="3"
+                    Background="#707070"
+                    VerticalAlignment="Bottom"
+                    Margin="14, 0, 0, 0"/>
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 7, 0">
+                    <Run Foreground="#707070">Фамилия</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <TextBox x:Name="LastName" Margin="14, 4, 7, 0" 
+                         hс:BorderElement.CornerRadius="7" 
+                         BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                         Text="{Binding Lastname}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="7, 15, 7, 0">
+                    <Run Foreground="#707070">Имя</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <TextBox x:Name="FirstName" Margin="7, 4, 7, 0" 
+                         hс:BorderElement.CornerRadius="7" 
+                         BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                         Text="{Binding Firstname}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="2">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="7, 15, 0, 0" Foreground="#707070">
+                    Отчество
+                </TextBlock>
+                <TextBox x:Name="MiddleName" Margin="7, 4, 0, 0" 
+                         hс:BorderElement.CornerRadius="7" 
+                         BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                         Text="{Binding Middlename}"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       Grid.ColumnSpan="3"
+                       FontSize="20" FontWeight="DemiBold"
+                       Margin="14, 10, 0, 10">
+                Контактная информация
+            </TextBlock>
+            <Border Height="1"
+                    Grid.Row="0" Grid.ColumnSpan="2"
+                    Background="#707070"
+                    VerticalAlignment="Bottom"
+                    Margin="14, 0, 0, 0"/>
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 7, 0">
+                    <Run Foreground="#707070">Номер телефона</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <TextBox x:Name="Phonenumber" Margin="14, 4, 7, 0" 
+                         hс:BorderElement.CornerRadius="7" 
+                         BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                         Text="{Binding Phonenumber}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="7, 15, 0, 0">
+                    <Run Foreground="#707070">Роль</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <ComboBox x:Name="Role" Margin="7, 4, 0, 0" 
+                          hс:BorderElement.CornerRadius="7" 
+                          BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="Id"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                       FontSize="20" FontWeight="DemiBold"
+                       Margin="14, 10, 0, 10">
+                Безопасность
+            </TextBlock>
+            <Border Height="1"
+                    Grid.Row="0" Grid.ColumnSpan="2"
+                    Background="#707070"
+                    VerticalAlignment="Bottom"
+                    Margin="14, 0, 0, 0"/>
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 0, 0">
+                    <Run Foreground="#707070">Логин</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <TextBox x:Name="Username" Margin="14, 4, 7, 0" 
+                         hс:BorderElement.CornerRadius="7" 
+                         BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                         Text="{Binding Username}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="7, 15, 0, 0">
+                    <Run Foreground="#707070">Пароль</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <PasswordBox x:Name="Password" Margin="7, 4, 0, 0" 
+                         hс:BorderElement.CornerRadius="7" 
+                         BorderBrush="#c7c7c9" Background="#FFE0E0E0"/>
+            </StackPanel>
+            <CheckBox x:Name="ThrowPassword"
+                      Grid.Row="2" Margin="14, 15, 0, 0"
+                      IsThreeState="False" Height="20"
+                      FontWeight="DemiBold"
+                      Content="Сбросить пароль при следующем входе"/>
+        </Grid>
     </Grid>
 </Window>

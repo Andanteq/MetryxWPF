@@ -43,9 +43,9 @@ namespace MetryxWPF
         }
         public void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if(DeviceName.Text == "" ||  DeviceName.Text == " " ||
-                DeviceType.SelectedValue == null || DeviceSerialnumber.Text == "" ||
-                DeviceSerialnumber.Text == " " || DeviceReleaseDate.SelectedDate == null ||
+            if(string.IsNullOrWhiteSpace(DeviceName.Text) ||
+                DeviceType.SelectedValue == null || string.IsNullOrWhiteSpace(DeviceSerialnumber.Text) ||
+                DeviceReleaseDate.SelectedDate == null ||
                 DeviceLastVerificationDate.SelectedDate == null)
             {
                 MessageBox.Show("Заполните все обязательные поля");
@@ -83,6 +83,8 @@ namespace MetryxWPF
 
                 existingDevice.Note =
                     DeviceNote.Text;
+
+                existingDevice.Unsuitable = Unsuitable.IsChecked.Value;
 
                 db.SaveChanges();
             }

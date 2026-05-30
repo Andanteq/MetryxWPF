@@ -20,7 +20,10 @@ public partial class User
     public string Firstname { get; set; } = null!;
 
     public string? Middlename { get; set; }
+
     public string Fullname { get; set; } = null!;
+
+    public bool IsThrowPassword { get; set; }
 
     public virtual ICollection<Measurementdevice> Measurementdevices { get; set; } = new List<Measurementdevice>();
 

@@ -11,14 +11,109 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BCrypt.Net;
 
 namespace MetryxWPF
 {
     public partial class UserWindow : Window
     {
-        public UserWindow()
+        public UserWindow(User user)
         {
             InitializeComponent();
+
+            DataContext = user;
+
+            using (PostgresContext db = new PostgresContext())
+            {
+                var roles = db.Roles.ToList();
+
+                Role.ItemsSource = roles;
+            }
+            Role.SelectedValue = user.Roleid;
+        }
+        public void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(LastName.Text) || string.IsNullOrWhiteSpace(FirstName.Text) ||
+               string.IsNullOrWhiteSpace(Phonenumber.Text) || Role.SelectedValue == null ||
+               string.IsNullOrWhiteSpace(Username.Text))
+            {
+                MessageBox.Show("Заполните все обязательные поля");
+                return;
+            }
+            if(!PhonenumberValidation(Phonenumber.Text))
+            {
+                MessageBox.Show("Некорректный формат номера");
+                return;
+            }
+
+            var user = DataContext as User;
+
+
+            using (PostgresContext db = new PostgresContext())
+            {
+                if (user.Id == 0)
+                {
+                    if (!UsernameValidation(Username.Text))
+                    {
+                        MessageBox.Show("Пользователь с таким логином уже существует");
+                        return;
+                    }
+                    if(!(Password.Password.Length > 1))
+                    {
+                        MessageBox.Show("Заполните пароль");
+                        return;
+                    }
+                    db.Users.Add(InsertData(user));
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var existingUser = db.Users
+                        .First(u => u.Id == user.Id);
+                    if (!UsernameValidation(Username.Text) && existingUser.Username != Username.Text)
+                    {
+                        MessageBox.Show("Пользователь с таким логином уже существует");
+                        return;
+                    }
+
+                    InsertData(existingUser);
+                    db.SaveChanges();
+                }
+            }
+        }
+        private User InsertData(User user)
+        {
+            user.Lastname = LastName.Text;
+            user.Firstname = FirstName.Text;
+            user.Middlename = MiddleName.Text;
+            user.Username = Username.Text;
+            user.Phonenumber = Phonenumber.Text;
+            user.Roleid = (int)Role.SelectedValue;
+            user.Fullname = LastName.Text + " " + FirstName.Text + " " + MiddleName.Text;
+            user.IsThrowPassword = ThrowPassword.IsChecked.Value;
+            if(!string.IsNullOrWhiteSpace(Password.Password))
+                user.Passwordhash = BCrypt.Net.BCrypt.HashPassword(Password.Password);
+
+            return user;
+        }
+        private bool PhonenumberValidation(string phoneNumber)
+        {
+            var length = phoneNumber.Length;
+            var firstChar = phoneNumber[0];
+
+            if (length == 11 && (firstChar == '7' || firstChar == '8'))
+                return true;
+            else
+                return false;
+        }
+        private bool UsernameValidation(string username)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var user = db.Users.FirstOrDefault(x => x.Username == username);
+                if (user != null) return false;
+                else return true;
+            }
         }
     }
 }

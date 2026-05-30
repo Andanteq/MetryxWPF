@@ -221,11 +221,10 @@ public partial class MainWindow : Window
     }
     private void AddUserButton_Click(object sender, RoutedEventArgs e)
     {
-        UserWindow UserWindow = new UserWindow();
-        if (UserWindow.ShowDialog() == true)
-        {
-            AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
-        }
+        User user = new User();
+        UserWindow UserWindow = new UserWindow(user);
+        UserWindow.ShowDialog();
+        AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
     }
     private void UsersSearch_TextChanged(object sender, TextChangedEventArgs e) 
     {
@@ -233,7 +232,22 @@ public partial class MainWindow : Window
     }
     private void AllUsersGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
+        if (AllUsersGrid.SelectedItem is UsersView selectedUser)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var user = db.Users
+                    .Include(d => d.Role)
+                    .FirstOrDefault(d => d.Id == selectedUser.Id);
 
+                if (user != null)
+                {
+                    UserWindow window = new UserWindow(user);
+                    window.ShowDialog();
+                    AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
+                }
+            }
+        }
     }
     #endregion
 }
