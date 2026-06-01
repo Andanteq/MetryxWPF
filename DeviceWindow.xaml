@@ -48,7 +48,8 @@
                         Foreground="White" Background="#030213"
                         Width="120" Height="40" Click="SaveButton_Click"
                         Margin="0, 0, 14, 0" hс:BorderElement.CornerRadius="7"
-                        FontSize="15">
+                        FontSize="15"
+                        Visibility="Hidden">
                     Сохранить
                 </Button>
                 <Grid Grid.Row="1" Grid.Column="0">

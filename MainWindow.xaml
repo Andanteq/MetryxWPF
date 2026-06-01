@@ -42,7 +42,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" MinHeight="58"/>
                         <RowDefinition Height="Auto" MinHeight="28"/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Canvas Grid.Row="0">
                         <TextBlock FontSize="20" Canvas.Left="14" Canvas.Top="30">Главная</TextBlock>
@@ -50,7 +50,64 @@
                     <Canvas Grid.Row="1">
                         <TextBlock FontSize="15" Foreground="#707070" Canvas.Left="14" Canvas.Top="10">Приборы, требующие поверки в ближайшее время</TextBlock>
                     </Canvas>
-                    <Canvas x:Name="AlertDevices" Grid.Row="2"/>
+                    <DataGrid x:Name="AlertDevicesGrid" Grid.Row="2"
+                              LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 20, 14, 20"
+                              FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
+                              ColumnWidth="SizeToHeader"
+                              AutoGenerateColumns="False"
+                              HeadersVisibility="Column"
+                              RowHeaderWidth="0"
+                              MouseDoubleClick="AlertDevicesGrid_MouseDoubleClick">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding VerificationStatus}"
+                                                 Value="Critical">
+                                        <Setter Property="Background"
+                                                Value="#FFFFCACA"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding VerificationStatus}"
+                                                 Value="Warning">
+                                        <Setter Property="Background"
+                                                Value="#FFFFF4C1"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="№"
+                                                    Width="40"
+                                                    IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                                    Path=Header}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Наименование"
+                                                Binding="{Binding Name}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Тип прибора"
+                                                Binding="{Binding TypeName}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Заводской номер"
+                                                Binding="{Binding Serialnumber}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Периодичность"
+                                                Binding="{Binding Verificationinterval}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Последняя поверка"
+                                                Binding="{Binding Lastverificationdate}"
+                                                Width="*"/>
+                            <DataGridTextColumn Header="Следующая поверка"
+                                                Binding="{Binding Nextverificationdate,
+                                                                  TargetNullValue='Не указана'}"
+                                                Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Width="200" Margin="0,83,0,-83">
@@ -63,7 +120,7 @@
                             <RowDefinition Height="Auto" MinHeight="58"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto" MinHeight="30"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -85,7 +142,8 @@
                                 Foreground="White" Background="#030213"
                                 Width="120" Height="40" Click="AddButton_Click"
                                 Margin="0, 0, 10, 10" hс:BorderElement.CornerRadius="7"
-                                FontSize="15">
+                                FontSize="15"
+                                Visibility="Hidden">
                             + Добавить
                         </Button>
                         <Grid Grid.Row="2" Grid.Column="0">
@@ -110,6 +168,8 @@
                                   FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
                                   ColumnWidth="SizeToHeader"
                                   AutoGenerateColumns="False"
+                                  HeadersVisibility="Column"
+                                  RowHeaderWidth="0"
                                   MouseDoubleClick="AllDevicesGrid_MouseDoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="№"
@@ -148,7 +208,8 @@
                     </Grid>
                 </TabItem.Content>
             </TabItem>
-            <TabItem x:Name="Users" Margin="0, 83, 0, -83">
+            <TabItem x:Name="Users" Margin="0, 83, 0, -83"
+                     Visibility="Collapsed">
                 <TabItem.Header>
                     <TextBlock FontSize="20" Padding="10,5">Пользователи</TextBlock>
                 </TabItem.Header>
@@ -193,6 +254,8 @@
                                   FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
                                   ColumnWidth="SizeToHeader"
                                   AutoGenerateColumns="False"
+                                  HeadersVisibility="Column"
+                                  RowHeaderWidth="0"
                                   MouseDoubleClick="AllUsersGrid_MouseDoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="№"

@@ -21,8 +21,22 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+        AlertDevicesGrid.ItemsSource = GetAlertDevices();
         AllDevicesGrid.ItemsSource = GetDevices();
         AllUsersGrid.ItemsSource = GetUsers();
+
+        switch (Session.CurrentUser.RoleId)
+        {
+            case 1:
+                Users.Visibility = Visibility.Visible;
+                AddButton.Visibility = Visibility.Visible;
+                break;
+            case 3:
+                AddButton.Visibility = Visibility.Visible;
+                break;
+            default:
+                break;
+        }
 
         using (PostgresContext db = new PostgresContext())
         {
@@ -162,6 +176,63 @@ public partial class MainWindow : Window
                     DeviceWindow window = new DeviceWindow(device);
                     window.ShowDialog();
                     AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region Главная страница
+    private List<MeasurementDeviceView> GetAlertDevices()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        using (var db = new PostgresContext())
+        {
+            return db.Measurementdevices
+                   .Include(d => d.Type)
+                   .AsEnumerable()
+                   .Select(d =>
+                   {
+                       var status = VerificationStatus.Normal;
+                       if (d.Nextverificationdate.HasValue) {
+                           var days = d.Nextverificationdate.Value.DayNumber - today.DayNumber;
+
+                           if (days <= 30)
+                               status = VerificationStatus.Critical;
+                           else if (days <= 183)
+                               status = VerificationStatus.Warning;
+                       }
+
+                       return new MeasurementDeviceView
+                       {
+                           Id = d.Id,
+                           Name = d.Name,
+                           TypeName = d.Type.Name,
+                           Serialnumber = d.Serialnumber,
+                           Verificationinterval = d.Verificationinterval,
+                           Lastverificationdate = d.Lastverificationdate,
+                           Nextverificationdate = d.Nextverificationdate,
+                           VerificationStatus = status,
+                       }; 
+                   })
+                   .ToList();
+        }
+    }
+    private void AlertDevicesGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (AlertDevicesGrid.SelectedItem is MeasurementDeviceView selectedDevice)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var device = db.Measurementdevices
+                    .Include(d => d.Type)
+                    .FirstOrDefault(d => d.Id == selectedDevice.Id);
+
+                if (device != null)
+                {
+                    DeviceWindow window = new DeviceWindow(device);
+                    window.ShowDialog();
+                    AlertDevicesGrid.ItemsSource = GetAlertDevices();
                 }
             }
         }

@@ -27,6 +27,18 @@ namespace MetryxWPF
             InitializeComponent();
             DataContext = device;
 
+            switch (Session.CurrentUser.RoleId)
+            {
+                case 1:
+                    SaveButton.Visibility = Visibility.Visible;
+                    break;
+                case 3:
+                    SaveButton.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    break;
+            }
+
             using (PostgresContext db = new PostgresContext())
             {
                 var types = db.Devicetypes.ToList();
