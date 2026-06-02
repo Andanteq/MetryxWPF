@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,6 +25,7 @@ public partial class MainWindow : Window
         AlertDevicesGrid.ItemsSource = GetAlertDevices();
         AllDevicesGrid.ItemsSource = GetDevices();
         AllUsersGrid.ItemsSource = GetUsers();
+        LoadTypes();
 
         switch (Session.CurrentUser.RoleId)
         {
@@ -31,7 +33,12 @@ public partial class MainWindow : Window
                 Users.Visibility = Visibility.Visible;
                 AddButton.Visibility = Visibility.Visible;
                 break;
+            case 2:
+                Users.Visibility = Visibility.Collapsed;
+                AddButton.Visibility = Visibility.Collapsed;
+                break;
             case 3:
+                Users.Visibility = Visibility.Collapsed;
                 AddButton.Visibility = Visibility.Visible;
                 break;
             default:
@@ -319,6 +326,83 @@ public partial class MainWindow : Window
                 }
             }
         }
+    }
+    #endregion
+
+    #region Типы
+    private ObservableCollection<Devicetype> _types;
+
+    private void LoadTypes()
+    {
+        using(PostgresContext db = new PostgresContext())
+        {
+            _types = new ObservableCollection<Devicetype>(
+                db.Devicetypes.OrderBy(t => t.Name).ToList());
+
+            TypesGrid.ItemsSource = _types;
+        }
+    }
+    private void AddTypeButton_Click(object sender, RoutedEventArgs e)
+    {
+        var newType = new Devicetype
+        {
+            Name = ""
+        };
+        _types.Add(newType);
+        TypesGrid.SelectedItem = newType;
+        TypesGrid.ScrollIntoView(newType);
+    }
+    private void TypesGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            var type = e.Row.Item as Devicetype;
+
+            if (type == null || string.IsNullOrWhiteSpace(type.Name))
+                return;
+
+            using (PostgresContext db = new PostgresContext())
+            {
+                if (type.Id == 0)
+                {
+                    db.Devicetypes.Add(type);
+                }
+                else
+                {
+                    db.Devicetypes.Update(type);
+                }
+
+                db.SaveChanges();
+            }
+        }),
+        System.Windows.Threading.DispatcherPriority.Background);
+    }
+    private void DeleteButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is Devicetype type)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var entity = db.Devicetypes.First(t => t.Id == type.Id);
+
+                db.Devicetypes.Remove(entity);
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("Невозможно удалить данный тип т.к. существуют зависимые записи");
+                    return;
+                }
+            }
+
+            _types.Remove(type);
+        }
+    }
+    private void TypesGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+    {
+        e.Row.Header = (e.Row.GetIndex() + 1).ToString();
     }
     #endregion
 }

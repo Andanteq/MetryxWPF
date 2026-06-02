@@ -32,6 +32,9 @@ namespace MetryxWPF
                 case 1:
                     SaveButton.Visibility = Visibility.Visible;
                     break;
+                case 2:
+                    SaveButton.Visibility = Visibility.Collapsed;
+                    break;
                 case 3:
                     SaveButton.Visibility = Visibility.Visible;
                     break;

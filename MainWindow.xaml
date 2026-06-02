@@ -143,7 +143,7 @@
                                 Width="120" Height="40" Click="AddButton_Click"
                                 Margin="0, 0, 10, 10" hс:BorderElement.CornerRadius="7"
                                 FontSize="15"
-                                Visibility="Hidden">
+                                Visibility="Visible">
                             + Добавить
                         </Button>
                         <Grid Grid.Row="2" Grid.Column="0">
@@ -209,7 +209,7 @@
                 </TabItem.Content>
             </TabItem>
             <TabItem x:Name="Users" Margin="0, 83, 0, -83"
-                     Visibility="Collapsed">
+                     Visibility="Visible">
                 <TabItem.Header>
                     <TextBlock FontSize="20" Padding="10,5">Пользователи</TextBlock>
                 </TabItem.Header>
@@ -285,6 +285,92 @@
                                 <DataGridTextColumn Header="Номер телефона"
                                                     Binding="{Binding Phonenumber}"
                                                     Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="DeviceType" Margin="0, 83, 0, -83">
+                <TabItem.Header>
+                    <TextBlock FontSize="20" Padding="10,5">Типы приборов</TextBlock>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="20" FontWeight="DemiBold"
+                                   Margin="14, 30, 0, 0" Grid.Row="0">
+                            Типы приборов
+                        </TextBlock>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="229*"/>
+                                <ColumnDefinition Width="808*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="15" Foreground="#707070"
+                                       Margin="14, 10, 0 ,0" Grid.Column="0">
+                                    Добавление типов приборов
+                            </TextBlock>
+                            <Button Grid.Column="1" 
+                                    Foreground="White" Background="#030213"
+                                    Width="50" Height="40" Click="AddTypeButton_Click"
+                                    Margin="10,0,0,0" hс:BorderElement.CornerRadius="7"
+                                    FontSize="20" HorizontalAlignment="Left">
+                                +
+                            </Button>
+                        </Grid>
+                        <DataGrid x:Name="TypesGrid" Grid.Row="2" Background="White" Margin="14, 10, 45, 20"
+                                  FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
+                                  ColumnWidth="SizeToHeader"
+                                  AutoGenerateColumns="False"
+                                  HeadersVisibility="Column"
+                                  RowHeaderWidth="0"
+                                  CanUserAddRows="False"
+                                  SelectionMode="Single"
+                                  LoadingRow="TypesGrid_LoadingRow"
+                                  RowEditEnding="TypesGrid_RowEditEnding">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="№"
+                                                        Width="50"
+                                                        IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                                        Path=Header}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Тип прибора"
+                                                    Binding="{Binding Name}"
+                                                    Width="*"/>
+                                <DataGridTemplateColumn Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button x:Name="DeleteButton"
+                                                    Content="Удалить"
+                                                    Tag="{Binding}"
+                                                    Click="DeleteButton_Click">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                                         Path=IsSelected}" Value="True">
+                                                                <Setter Property="Visibility"
+                                                                        Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
