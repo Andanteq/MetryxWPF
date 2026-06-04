@@ -15,13 +15,21 @@ using System.Windows.Shapes;
 namespace MetryxWPF
 {
     /// <summary>
-    /// Логика взаимодействия для AddUserWindow.xaml
+    /// Логика взаимодействия для ConfirmationWindow.xaml
     /// </summary>
-    public partial class AddUserWindow : Window
+    public partial class ConfirmationWindow : Window
     {
-        public AddUserWindow()
+        public ConfirmationWindow()
         {
             InitializeComponent();
+        }
+        public void YesButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+        }
+        public void NoButton_Click(Object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
         }
     }
 }

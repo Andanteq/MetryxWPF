@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HandyControl.Controls;
+using HandyControl.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,14 +18,35 @@ namespace MetryxWPF;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window
+public partial class MainWindow : System.Windows.Window
 {
     public MainWindow()
     {
         InitializeComponent();
 
+        AlertDevicesGrid.ItemsSource = GetAlertDevices();
         AllDevicesGrid.ItemsSource = GetDevices();
         AllUsersGrid.ItemsSource = GetUsers();
+        LoadTypes();
+        Notifications();
+
+        switch (Session.CurrentUser.RoleId)
+        {
+            case 1:
+                Users.Visibility = Visibility.Visible;
+                AddButton.Visibility = Visibility.Visible;
+                break;
+            case 2:
+                Users.Visibility = Visibility.Collapsed;
+                AddButton.Visibility = Visibility.Collapsed;
+                break;
+            case 3:
+                Users.Visibility = Visibility.Collapsed;
+                AddButton.Visibility = Visibility.Visible;
+                break;
+            default:
+                break;
+        }
 
         using (PostgresContext db = new PostgresContext())
         {
@@ -34,6 +58,23 @@ public partial class MainWindow : Window
 
             filters.ItemsSource = types;
             filters.SelectedIndex = 0;
+        }
+    }
+    private void Notifications()
+    {
+        using (PostgresContext db = new PostgresContext())
+        {
+            var expiringDevices = db.Measurementdevices
+                .Where(d => d.Nextverificationdate <= DateOnly.FromDateTime(DateTime.Today.AddDays(7)))
+                .ToList();
+            foreach (var device in expiringDevices)
+            {
+                Growl.WarningGlobal(new GrowlInfo
+                {
+                    Message = $"{device.Name} ({device.Serialnumber}) требует поверки до {device.Nextverificationdate:dd.MM.yyyy}",
+                    WaitTime = 8
+                });
+            }
         }
     }
 
@@ -131,6 +172,7 @@ public partial class MainWindow : Window
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
         AddDeviceWindow addDeviceWindow = new AddDeviceWindow();
+        addDeviceWindow.Owner = this;
         if (addDeviceWindow.ShowDialog() == true)
         {
             AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
@@ -160,8 +202,66 @@ public partial class MainWindow : Window
                 if (device != null)
                 {
                     DeviceWindow window = new DeviceWindow(device);
+                    window.Owner = this;
                     window.ShowDialog();
                     AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region Главная страница
+    private List<MeasurementDeviceView> GetAlertDevices()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        using (var db = new PostgresContext())
+        {
+            return db.Measurementdevices
+                   .Include(d => d.Type)
+                   .AsEnumerable()
+                   .Select(d =>
+                   {
+                       var status = VerificationStatus.Normal;
+                       if (d.Nextverificationdate.HasValue) {
+                           var days = d.Nextverificationdate.Value.DayNumber - today.DayNumber;
+
+                           if (days <= 30)
+                               status = VerificationStatus.Critical;
+                           else if (days <= 183)
+                               status = VerificationStatus.Warning;
+                       }
+
+                       return new MeasurementDeviceView
+                       {
+                           Id = d.Id,
+                           Name = d.Name,
+                           TypeName = d.Type.Name,
+                           Serialnumber = d.Serialnumber,
+                           Verificationinterval = d.Verificationinterval,
+                           Lastverificationdate = d.Lastverificationdate,
+                           Nextverificationdate = d.Nextverificationdate,
+                           VerificationStatus = status,
+                       }; 
+                   })
+                   .ToList();
+        }
+    }
+    private void AlertDevicesGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (AlertDevicesGrid.SelectedItem is MeasurementDeviceView selectedDevice)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var device = db.Measurementdevices
+                    .Include(d => d.Type)
+                    .FirstOrDefault(d => d.Id == selectedDevice.Id);
+
+                if (device != null)
+                {
+                    DeviceWindow window = new DeviceWindow(device);
+                    window.ShowDialog();
+                    AlertDevicesGrid.ItemsSource = GetAlertDevices();
                 }
             }
         }
@@ -221,15 +321,139 @@ public partial class MainWindow : Window
     }
     private void AddUserButton_Click(object sender, RoutedEventArgs e)
     {
-        AddUserWindow addUserWindow = new AddUserWindow();
-        if (addUserWindow.ShowDialog() == true)
-        {
-            AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
-        }
+        User user = new User();
+        UserWindow UserWindow = new UserWindow(user);
+        UserWindow.Owner = this;
+        UserWindow.ShowDialog();
+        AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
     }
     private void UsersSearch_TextChanged(object sender, TextChangedEventArgs e) 
     {
         AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
+    }
+    private void AllUsersGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (AllUsersGrid.SelectedItem is UsersView selectedUser)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var user = db.Users
+                    .Include(d => d.Role)
+                    .FirstOrDefault(d => d.Id == selectedUser.Id);
+
+                if (user != null)
+                {
+                    UserWindow window = new UserWindow(user);
+                    window.Owner = this;
+                    window.ShowDialog();
+                    AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region Типы
+    private ObservableCollection<Devicetype> _types;
+
+    private void LoadTypes()
+    {
+        using(PostgresContext db = new PostgresContext())
+        {
+            _types = new ObservableCollection<Devicetype>(
+                db.Devicetypes.OrderBy(t => t.Name).ToList());
+
+            TypesGrid.ItemsSource = _types;
+        }
+    }
+    private void AddTypeButton_Click(object sender, RoutedEventArgs e)
+    {
+        var newType = new Devicetype
+        {
+            Name = ""
+        };
+        _types.Add(newType);
+        TypesGrid.SelectedItem = newType;
+        TypesGrid.ScrollIntoView(newType);
+    }
+    private void TypesGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+    {
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            var type = e.Row.Item as Devicetype;
+
+            if (type == null || string.IsNullOrWhiteSpace(type.Name))
+                return;
+
+            using (PostgresContext db = new PostgresContext())
+            {
+                if (type.Id == 0)
+                {
+                    db.Devicetypes.Add(type);
+                }
+                else
+                {
+                    db.Devicetypes.Update(type);
+                }
+
+                db.SaveChanges();
+            }
+        }),
+        System.Windows.Threading.DispatcherPriority.Background);
+    }
+    private void DeleteButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is Devicetype type)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var entity = db.Devicetypes.First(t => t.Id == type.Id);
+
+                db.Devicetypes.Remove(entity);
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    System.Windows.MessageBox.Show("Невозможно удалить данный тип т.к. существуют зависимые записи");
+                    return;
+                }
+            }
+
+            _types.Remove(type);
+        }
+    }
+    private void TypesGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+    {
+        e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+    }
+    #endregion
+
+    #region Протоколы
+    private List<VerificationsView> GetVerifications()
+    {
+
+    }
+    private List<VerificationsView> GetSearchedVerifications()
+    {
+
+    }
+    private void AddVerificationButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+    private void VerificationSearch_TextChanged(object sender, TextChangedEventArgs e)
+    {
+
+    }
+    private void AllVerificationsGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+    {
+
+    }
+    private void AllVerificationsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+
     }
     #endregion
 }

@@ -48,8 +48,18 @@
                         Foreground="White" Background="#030213"
                         Width="120" Height="40" Click="SaveButton_Click"
                         Margin="0, 0, 14, 0" hс:BorderElement.CornerRadius="7"
-                        FontSize="15">
+                        FontSize="15"
+                        Visibility="Visible">
                     Сохранить
+                </Button>
+                <Button Grid.Row="4" Grid.Column="1"
+                        x:Name="DeleteButton"
+                        Foreground="White" Background="#cc231b"
+                        Width="120" Height="40" Click="DeleteButton_Click"
+                        hс:BorderElement.CornerRadius="7"
+                        FontSize="15"
+                        Visibility="Visible">
+                    Удалить
                 </Button>
                 <Grid Grid.Row="1" Grid.Column="0">
                     <Grid.RowDefinitions>
@@ -226,7 +236,8 @@
                             Background="#707070"
                             VerticalAlignment="Bottom"
                             Margin="14, 0, 0, 0"/>
-                    <CheckBox Grid.Row="1" Grid.Column="0"
+                    <CheckBox x:Name="Suitable"
+                              Grid.Row="1" Grid.Column="0"
                               Margin="14, 15, 0, 0"
                               IsThreeState="False" FontWeight="DemiBold"
                               Height="20" Content="Непригодный"/>

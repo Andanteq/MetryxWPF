@@ -101,7 +101,7 @@ public partial class PostgresContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("serialnumber");
             entity.Property(e => e.Typeid).HasColumnName("typeid");
-            entity.Property(e => e.Unsuitable).HasColumnName("unsuitable");
+            entity.Property(e => e.Suitable).HasColumnName("unsuitable");
             entity.Property(e => e.Userid).HasColumnName("userid");
             entity.Property(e => e.Responsible)
                 .HasColumnType("character varying")
@@ -185,6 +185,10 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Username)
                 .HasColumnType("character varying")
                 .HasColumnName("username");
+            entity.Property(e => e.Fullname)
+                .HasColumnType("character varying")
+                .HasColumnName("fullname");
+            entity.Property(e => e.IsThrowPassword).HasColumnName("isthrowpassword");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.Roleid)
@@ -204,8 +208,10 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Measurementdeviceid).HasColumnName("measurementdeviceid");
             entity.Property(e => e.Nextverificationdate).HasColumnName("nextverificationdate");
             entity.Property(e => e.Result).HasColumnType("character varying");
-            entity.Property(e => e.Unsuitable).HasColumnName("unsuitable");
+            entity.Property(e => e.Suitable).HasColumnName("unsuitable");
             entity.Property(e => e.Verificationdate).HasColumnName("verificationdate");
+            entity.Property(e => e.Organization).HasColumnType("character varying");
+            entity.Property(e => e.Certificatenumber).HasColumnType("character varying");
 
             entity.HasOne(d => d.Measurementdevice).WithMany(p => p.Verifications)
                 .HasForeignKey(d => d.Measurementdeviceid)

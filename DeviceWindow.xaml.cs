@@ -27,6 +27,24 @@ namespace MetryxWPF
             InitializeComponent();
             DataContext = device;
 
+            switch (Session.CurrentUser.RoleId)
+            {
+                case 1:
+                    SaveButton.Visibility = Visibility.Visible;
+                    DeleteButton.Visibility = Visibility.Visible;
+                    break;
+                case 2:
+                    SaveButton.Visibility = Visibility.Collapsed;
+                    DeleteButton.Visibility = Visibility.Collapsed;
+                    break;
+                case 3:
+                    SaveButton.Visibility = Visibility.Visible;
+                    DeleteButton.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    break;
+            }
+
             using (PostgresContext db = new PostgresContext())
             {
                 var types = db.Devicetypes.ToList();
@@ -43,9 +61,9 @@ namespace MetryxWPF
         }
         public void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if(DeviceName.Text == "" ||  DeviceName.Text == " " ||
-                DeviceType.SelectedValue == null || DeviceSerialnumber.Text == "" ||
-                DeviceSerialnumber.Text == " " || DeviceReleaseDate.SelectedDate == null ||
+            if(string.IsNullOrWhiteSpace(DeviceName.Text) ||
+                DeviceType.SelectedValue == null || string.IsNullOrWhiteSpace(DeviceSerialnumber.Text) ||
+                DeviceReleaseDate.SelectedDate == null ||
                 DeviceLastVerificationDate.SelectedDate == null)
             {
                 MessageBox.Show("Заполните все обязательные поля");
@@ -84,8 +102,35 @@ namespace MetryxWPF
                 existingDevice.Note =
                     DeviceNote.Text;
 
+                existingDevice.Suitable = Suitable.IsChecked.Value;
+
                 db.SaveChanges();
             }
+        }
+        public void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var deleteWindow = new ConfirmationWindow();
+            if (deleteWindow.ShowDialog() == true)
+            {
+                var device = DataContext as Measurementdevice;
+                using (PostgresContext db = new PostgresContext())
+                {
+                    var deletingDevice = db.Measurementdevices.First(d => d.Id == device.Id);
+
+                    db.Measurementdevices.Remove(deletingDevice);
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Невозможно удалить данный прибор тип т.к. существуют зависимые записи");
+                        return;
+                    }
+                    Close();
+                }
+            }
+            else return;
         }
         public void UploadDocument_Click(object sender, RoutedEventArgs e)
         {

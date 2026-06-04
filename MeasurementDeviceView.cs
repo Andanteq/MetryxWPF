@@ -20,5 +20,14 @@ namespace MetryxWPF
         public DateOnly Lastverificationdate { get; set; }
 
         public DateOnly? Nextverificationdate { get; set; }
+
+        public VerificationStatus VerificationStatus { get; set; }
+    }
+    
+    public enum VerificationStatus
+    {
+        Normal,
+        Warning,
+        Critical
     }
 }
