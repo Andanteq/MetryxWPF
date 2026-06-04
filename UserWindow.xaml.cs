@@ -81,6 +81,31 @@ namespace MetryxWPF
                 }
             }
         }
+        public void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var deleteWindow = new ConfirmationWindow();
+            if (deleteWindow.ShowDialog() == true)
+            {
+                var user = DataContext as User;
+                using (PostgresContext db = new PostgresContext())
+                {
+                    var deletingUser = db.Users.First(d => d.Id == user.Id);
+
+                    db.Users.Remove(deletingUser);
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Невозможно удалить данного пользователя т.к. существуют зависимые записи");
+                        return;
+                    }
+                    Close();
+                }
+            }
+            else return;
+        }
         private User InsertData(User user)
         {
             user.Lastname = LastName.Text;

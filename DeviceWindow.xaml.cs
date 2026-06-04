@@ -31,12 +31,15 @@ namespace MetryxWPF
             {
                 case 1:
                     SaveButton.Visibility = Visibility.Visible;
+                    DeleteButton.Visibility = Visibility.Visible;
                     break;
                 case 2:
                     SaveButton.Visibility = Visibility.Collapsed;
+                    DeleteButton.Visibility = Visibility.Collapsed;
                     break;
                 case 3:
                     SaveButton.Visibility = Visibility.Visible;
+                    DeleteButton.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
@@ -103,6 +106,31 @@ namespace MetryxWPF
 
                 db.SaveChanges();
             }
+        }
+        public void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var deleteWindow = new ConfirmationWindow();
+            if (deleteWindow.ShowDialog() == true)
+            {
+                var device = DataContext as Measurementdevice;
+                using (PostgresContext db = new PostgresContext())
+                {
+                    var deletingDevice = db.Measurementdevices.First(d => d.Id == device.Id);
+
+                    db.Measurementdevices.Remove(deletingDevice);
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Невозможно удалить данный прибор тип т.к. существуют зависимые записи");
+                        return;
+                    }
+                    Close();
+                }
+            }
+            else return;
         }
         public void UploadDocument_Click(object sender, RoutedEventArgs e)
         {

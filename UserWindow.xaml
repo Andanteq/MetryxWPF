@@ -49,6 +49,16 @@
                 FontSize="15">
             Сохранить
         </Button>
+        <Button Grid.Row="4" Grid.Column="1"
+                x:Name="DeleteButton"
+                Foreground="White" Background="#cc231b"
+                Width="120" Height="40" Click="DeleteButton_Click"
+                hс:BorderElement.CornerRadius="7"
+                FontSize="15"
+                Margin="0, 130, 0, 0"
+                Visibility="Visible">
+            Удалить
+        </Button>
         <Grid Grid.Row="1" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

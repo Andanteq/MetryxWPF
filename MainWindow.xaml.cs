@@ -152,6 +152,7 @@ public partial class MainWindow : Window
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
         AddDeviceWindow addDeviceWindow = new AddDeviceWindow();
+        addDeviceWindow.Owner = this;
         if (addDeviceWindow.ShowDialog() == true)
         {
             AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
@@ -181,6 +182,7 @@ public partial class MainWindow : Window
                 if (device != null)
                 {
                     DeviceWindow window = new DeviceWindow(device);
+                    window.Owner = this;
                     window.ShowDialog();
                     AllDevicesGrid.ItemsSource = GetSearchedDevices(Search.Text, (int)filters.SelectedValue);
                 }
@@ -301,6 +303,7 @@ public partial class MainWindow : Window
     {
         User user = new User();
         UserWindow UserWindow = new UserWindow(user);
+        UserWindow.Owner = this;
         UserWindow.ShowDialog();
         AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
     }
@@ -321,6 +324,7 @@ public partial class MainWindow : Window
                 if (user != null)
                 {
                     UserWindow window = new UserWindow(user);
+                    window.Owner = this;
                     window.ShowDialog();
                     AllUsersGrid.ItemsSource = GetSearchedUsers(UsersSearch.Text);
                 }
