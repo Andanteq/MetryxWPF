@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HandyControl.Controls;
+using HandyControl.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
@@ -16,7 +18,7 @@ namespace MetryxWPF;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window
+public partial class MainWindow : System.Windows.Window
 {
     public MainWindow()
     {
@@ -26,6 +28,7 @@ public partial class MainWindow : Window
         AllDevicesGrid.ItemsSource = GetDevices();
         AllUsersGrid.ItemsSource = GetUsers();
         LoadTypes();
+        Notifications();
 
         switch (Session.CurrentUser.RoleId)
         {
@@ -55,6 +58,23 @@ public partial class MainWindow : Window
 
             filters.ItemsSource = types;
             filters.SelectedIndex = 0;
+        }
+    }
+    private void Notifications()
+    {
+        using (PostgresContext db = new PostgresContext())
+        {
+            var expiringDevices = db.Measurementdevices
+                .Where(d => d.Nextverificationdate <= DateOnly.FromDateTime(DateTime.Today.AddDays(7)))
+                .ToList();
+            foreach (var device in expiringDevices)
+            {
+                Growl.WarningGlobal(new GrowlInfo
+                {
+                    Message = $"{device.Name} ({device.Serialnumber}) требует поверки до {device.Nextverificationdate:dd.MM.yyyy}",
+                    WaitTime = 8
+                });
+            }
         }
     }
 
@@ -396,7 +416,7 @@ public partial class MainWindow : Window
                 }
                 catch(Exception ex)
                 {
-                    MessageBox.Show("Невозможно удалить данный тип т.к. существуют зависимые записи");
+                    System.Windows.MessageBox.Show("Невозможно удалить данный тип т.к. существуют зависимые записи");
                     return;
                 }
             }
