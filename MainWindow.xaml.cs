@@ -429,4 +429,31 @@ public partial class MainWindow : System.Windows.Window
         e.Row.Header = (e.Row.GetIndex() + 1).ToString();
     }
     #endregion
+
+    #region Протоколы
+    private List<VerificationsView> GetVerifications()
+    {
+
+    }
+    private List<VerificationsView> GetSearchedVerifications()
+    {
+
+    }
+    private void AddVerificationButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+    private void VerificationSearch_TextChanged(object sender, TextChangedEventArgs e)
+    {
+
+    }
+    private void AllVerificationsGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+    {
+
+    }
+    private void AllVerificationsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+
+    }
+    #endregion
 }

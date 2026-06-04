@@ -116,7 +116,83 @@
                 </TabItem.Header>
                 <TabItem.Content>
                     <Grid>
-                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" MinHeight="58"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" MinHeight="30"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="20" FontWeight="DemiBold"
+                                   Margin="14, 30, 0, 0" Grid.Row="0">
+                            Протоколы
+                        </TextBlock>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="200"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="15" Foreground="#707070"
+                                       Margin="14, 10, 0 ,0" Grid.Column="0">
+                                    Управление пользователями системы
+                            </TextBlock>
+                            <Button x:Name="AddVerificationButton" Grid.Column="1" 
+                                    Foreground="White" Background="#030213"
+                                    Width="120" Height="40" Click="AddVerificationButton_Click"
+                                    Margin="0, 0, 10, 10" hc:BorderElement.CornerRadius="7"
+                                    FontSize="15">
+                                + Добавить
+                            </Button>
+                        </Grid>
+                        <TextBox x:Name="VerificationSearch" Margin="14,0,45,0" 
+                                 Grid.Row="2" Height="30"
+                                 VerticalAlignment="Top" Background="#FFE0E0E0"
+                                 hc:BorderElement.CornerRadius="7" HorizontalScrollBarVisibility="Disabled"
+                                 VerticalScrollBarVisibility="Disabled" BorderBrush="#c7c7c9"
+                                 TextChanged="VerificationSearch_TextChanged">
+                        </TextBox>
+                        <DataGrid x:Name="AllVerificationsGrid" Grid.Row="3" Grid.ColumnSpan="2" Background="White"
+                                  LoadingRow="AllVerificationsGrid_LoadingRow" Margin="14, 10, 45, 20"
+                                  FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
+                                  ColumnWidth="SizeToHeader"
+                                  AutoGenerateColumns="False"
+                                  HeadersVisibility="Column"
+                                  RowHeaderWidth="0"
+                                  MouseDoubleClick="AllVerificationsGrid_MouseDoubleClick">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="№"
+                                                        Width="40"
+                                                        IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                                        Path=Header}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Организация"
+                                                    Binding="{Binding Organization}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Дата поверки"
+                                                    Binding="{Binding Verificationdate}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Действительна до"
+                                                    Binding="{Binding Nextverificationdate}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Certificatenumber}"
+                                                    Width="*">
+                                    <DataGridTextColumn.Header>
+                                        <TextBlock Text="Номер свидетельства/Номер извещения"
+                                                   TextWrapping="Wrap"
+                                                   HorizontalAlignment="Center"/>
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Пригодность"
+                                                    Binding="{Binding Suitable}"
+                                                    Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Grid>
                 </TabItem.Content>
             </TabItem>

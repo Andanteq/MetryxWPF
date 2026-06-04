@@ -21,7 +21,7 @@ public partial class Measurementdevice
 
     public DateOnly? Nextverificationdate { get; set; }
 
-    public bool? Unsuitable { get; set; }
+    public bool? Suitable { get; set; }
 
     public string? Installationlocation { get; set; }
 

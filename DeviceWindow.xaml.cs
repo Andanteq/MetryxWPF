@@ -102,7 +102,7 @@ namespace MetryxWPF
                 existingDevice.Note =
                     DeviceNote.Text;
 
-                existingDevice.Unsuitable = Unsuitable.IsChecked.Value;
+                existingDevice.Suitable = Suitable.IsChecked.Value;
 
                 db.SaveChanges();
             }
