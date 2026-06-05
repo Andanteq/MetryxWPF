@@ -8,6 +8,8 @@ namespace MetryxWPF
 {
     internal class VerificationsView
     {
+        public int Id { get; set; }
+
         public string Organization { get; set; }
 
         public string Certificatenumber { get; set; }
@@ -16,8 +18,10 @@ namespace MetryxWPF
 
         public DateOnly? Nextverificationdate { get; set; }
 
-        public string? Result { get; set; }
-
         public bool? Suitable { get; set; }
+
+        public string VSearialnumber { get; set; }
+
+        public string VMeasurementdevice {  get; set; }
     }
 }

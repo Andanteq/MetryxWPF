@@ -180,6 +180,12 @@
                                 <DataGridTextColumn Header="Действительна до"
                                                     Binding="{Binding Nextverificationdate}"
                                                     Width="*"/>
+                                <DataGridTextColumn Header="Заводской №"
+                                                    Binding="{Binding VSearialnumber}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Прибор"
+                                                    Binding="{Binding VMeasurementdevice}"
+                                                    Width="*"/>
                                 <DataGridTextColumn Binding="{Binding Certificatenumber}"
                                                     Width="*">
                                     <DataGridTextColumn.Header>

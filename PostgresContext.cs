@@ -29,6 +29,8 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Verification> Verifications { get; set; }
 
+    public virtual DbSet<Verificationtype> Verificationtypes { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=super29");
@@ -157,6 +159,18 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Name).HasColumnType("character varying");
         });
 
+        modelBuilder.Entity<Verificationtype>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("verificationtype_pk");
+
+            entity.ToTable("verificationtype");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+            entity.Property(e => e.Name).HasColumnType("character varying");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("user_pk");
@@ -207,7 +221,6 @@ public partial class PostgresContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.Measurementdeviceid).HasColumnName("measurementdeviceid");
             entity.Property(e => e.Nextverificationdate).HasColumnName("nextverificationdate");
-            entity.Property(e => e.Result).HasColumnType("character varying");
             entity.Property(e => e.Suitable).HasColumnName("unsuitable");
             entity.Property(e => e.Verificationdate).HasColumnName("verificationdate");
             entity.Property(e => e.Organization).HasColumnType("character varying");
