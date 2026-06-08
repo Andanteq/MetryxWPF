@@ -25,12 +25,17 @@ namespace MetryxWPF
 
             DataContext = verification;
 
-            using (PostgresContext db = new PostgresContext())
+            /*using (PostgresContext db = new PostgresContext())
             {
                 var types = db.Verificationtypes.ToList();
                 VType.ItemSource = types;
             }
-            ValueType.SelectedValue = verification.Verificationtypeid;
+            VType.SelectedValue = verification.Verificationtypeid;*/
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
