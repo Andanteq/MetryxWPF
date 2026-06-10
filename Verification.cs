@@ -13,7 +13,7 @@ public partial class Verification
 
     public DateOnly Verificationdate { get; set; }
 
-    public DateOnly? Nextverificationdate { get; set; }
+    public DateOnly Nextverificationdate { get; set; }
 
     public bool? Suitable { get; set; }
 

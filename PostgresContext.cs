@@ -168,7 +168,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
-            entity.Property(e => e.Name).HasColumnType("character varying");
+            entity.Property(e => e.Name)
+                .HasColumnName("name")
+                .HasColumnType("character varying");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -220,6 +222,7 @@ public partial class PostgresContext : DbContext
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Measurementdeviceid).HasColumnName("measurementdeviceid");
+            entity.Property(e => e.Verificationtypeid).HasColumnName("verificationtypeid");
             entity.Property(e => e.Nextverificationdate).HasColumnName("nextverificationdate");
             entity.Property(e => e.Suitable).HasColumnName("suitable");
             entity.Property(e => e.Verificationdate).HasColumnName("verificationdate");
@@ -234,6 +237,11 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => d.Measurementdeviceid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("verification_measurementdevice_fk");
+
+            entity.HasOne(d => d.Verificationtype).WithMany(p => p.Verifications)
+                .HasForeignKey(d => d.Verificationtypeid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("verification_verificationtype_fk");
         });
 
         OnModelCreatingPartial(modelBuilder);

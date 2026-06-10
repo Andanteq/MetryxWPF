@@ -6,9 +6,12 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:local="clr-namespace:MetryxWPF"
         mc:Ignorable="d"
-        Title="VerificationWindow" Height="520" Width="800">
+        Title="VerificationWindow" Height="520" Width="800"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -30,16 +33,15 @@
             <TextBlock Grid.Row="1" FontSize="15"
                        Foreground="#707070"
                        Margin="14, 5, 0, 5">
-                <Run Text="{Binding Measurementid.Name}"/>
+                <Run Text="{Binding Measurementdevice.Name}"/>
                 <Run>•</Run>
-                <Run Text="{Binding Measurementid.Serialnumber}"/>
+                <Run Text="{Binding Measurementdevice.Serialnumber}"/>
             </TextBlock>
         </Grid>
         <Border Height="1"
                 Grid.Row="0" Grid.ColumnSpan="2"
                 Background="#707070"
-                VerticalAlignment="Bottom"
-                Margin="14, 0, 0, 0"/>
+                VerticalAlignment="Bottom"/>
         <Button Grid.Row="0" Grid.Column="1"
                 x:Name="SaveButton"
                 Foreground="White" Background="#030213"
@@ -48,5 +50,236 @@
                 FontSize="15">
                     Сохранить
         </Button>
+        <Button Grid.Row="4" Grid.Column="1"
+                x:Name="DeleteButton"
+                Foreground="White" Background="#cc231b"
+                Width="120" Height="40" Click="DeleteButton_Click"
+                hc:BorderElement.CornerRadius="7"
+                FontSize="15"
+                Visibility="Visible">
+            Удалить
+        </Button>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       FontSize="20" FontWeight="DemiBold"
+                       Margin="14, 10, 0, 10">
+                Информация о СИ
+            </TextBlock>
+            <Border Height="1"
+                    Grid.Row="0" Grid.ColumnSpan="2"
+                    Background="#707070"
+                    VerticalAlignment="Bottom"
+                    Margin="14, 0, 0, 0"/>
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 0, 0">
+                    <Run Foreground="#707070">Наименование прибора</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="DeviceTextBox" 
+                             Grid.Column="0"
+                             Margin="14, 4, 7, 0" 
+                             hc:BorderElement.CornerRadius="7" 
+                             BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                             IsReadOnly="True"/>
+                    <Button Grid.Column="1"
+                            Content="..."
+                            Click="SelectDevice_Click"
+                            Background="#FFE0E0E0"/>
+                </Grid>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 0, 0"
+                           Foreground="#707070">
+                    Заводской номер
+                </TextBlock>
+                <TextBox x:Name="DeviceSerialNumber" Margin="14, 4, 0, 0" 
+                         hc:BorderElement.CornerRadius="7" 
+                         BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                         IsReadOnly="True"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="3"
+                       FontSize="20" FontWeight="DemiBold"
+                       Margin="14, 10, 0, 10">
+                Результаты поверки
+            </TextBlock>
+            <Border Height="1"
+                    Grid.Row="0" Grid.ColumnSpan="3"
+                    Background="#707070"
+                    VerticalAlignment="Bottom"
+                    Margin="14, 0, 0, 0"/>
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 0, 0"
+                           Foreground="#707070">
+                    <Run Foreground="#707070">Дата поверки</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <DatePicker x:Name="Verificationdate" Margin="14, 4, 0, 0"
+                            hc:BorderElement.CornerRadius="7" 
+                            BorderBrush="#c7c7c9"
+                            BorderThickness="1"
+                            Background="#FFE0E0E0"
+                            IsDropDownOpen="False" SelectedDateFormat="Short">
+                    <DatePicker.Resources>
+                        <Style TargetType="Calendar">
+                            <Setter Property="Language" Value="ru-RU"/>
+                        </Style>
+                        <Style TargetType="CalendarItem">
+                            <Setter Property="Language" Value="ru-RU"/>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 0, 0"
+                           Foreground="#707070">
+                    <Run Foreground="#707070">Дата следующей поверки</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <DatePicker x:Name="Nextverificationdate" Margin="14, 4, 0, 0"
+                            hc:BorderElement.CornerRadius="7" 
+                            BorderBrush="#c7c7c9"
+                            BorderThickness="1"
+                            Background="#FFE0E0E0"
+                            IsDropDownOpen="False" SelectedDateFormat="Short">
+                    <DatePicker.Resources>
+                        <Style TargetType="Calendar">
+                            <Setter Property="Language" Value="ru-RU"/>
+                        </Style>
+                        <Style TargetType="CalendarItem">
+                            <Setter Property="Language" Value="ru-RU"/>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="2">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 0, 0">
+                   <Run Foreground="#707070">Тип поверки</Run>
+                   <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <ComboBox x:Name="VType" Margin="14, 4, 0, 0" 
+                          hc:BorderElement.CornerRadius="7" 
+                          BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="Id"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 0, 0"
+                           Foreground="#707070">
+                    <Run Foreground="#707070">Номер свидетельства/извещения</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <TextBox x:Name="Certificatenumber" Margin="14, 4, 0, 0" 
+                         hc:BorderElement.CornerRadius="7" 
+                         BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                         Text="{Binding Certificatenumber}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <TextBlock FontSize="12" FontWeight="DemiBold"
+                           Margin="14, 15, 0, 0"
+                           Foreground="#707070">
+                    <Run Foreground="#707070">Организация поверитель</Run>
+                    <Run Foreground="Red">*</Run>
+                </TextBlock>
+                <TextBox x:Name="Organization" Margin="14, 4, 0, 0" 
+                         hc:BorderElement.CornerRadius="7" 
+                         BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                         Text="{Binding Organization}"/>
+            </StackPanel>
+            <CheckBox x:Name="Suitable"
+                      Grid.Row="2" Grid.Column="0"
+                      Margin="14, 15, 0, 0"
+                      IsThreeState="False" FontWeight="DemiBold"
+                      Height="20" Content="Пригодность"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       FontSize="20" FontWeight="DemiBold"
+                       Margin="14, 10, 0, 10">
+                Документы и файлы
+            </TextBlock>
+            <Border Height="1"
+                    Grid.Row="0"
+                    Background="#707070"
+                    VerticalAlignment="Bottom"
+                    Margin="14, 0, 0, 0"/>
+            <Button Grid.Row="1" hc:BorderElement.CornerRadius="7"
+                    Margin="14, 10, 0, 0" FontWeight="DemiBold"
+                    HorizontalAlignment="Left"
+                    Width="130" Background="#eceef2"
+                    Click="UploadDocument_Click">
+                Загрузить файлы
+            </Button>
+            <ListBox x:Name="DocumentsListBox"
+                     Grid.Row="2"
+                     Margin="14, 10, 0, 20">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Filename}"
+                                       VerticalAlignment="Center"/>
+                            <Button Grid.Column="1"
+                                    Content="Скачать"
+                                    Tag="{Binding}"
+                                    Click="DownloadDocument_Click"/>
+                            <Button Grid.Column="2"
+                                    Content="Удалить"
+                                    Tag="{Binding}"
+                                    Click="DeleteDocument_Click"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
     </Grid>
 </Window>

@@ -217,30 +217,30 @@
                 </Grid>
                 <Grid Grid.Row="3" Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="3"
                                FontSize="20" FontWeight="DemiBold"
-                               Margin="14, 10, 0, 10">
+                               Margin="14,10,0,10">
                         Экспулатация
                     </TextBlock>
                     <Border Height="1"
-                            Grid.Row="0" Grid.ColumnSpan="2"
+                            Grid.Row="0" Grid.ColumnSpan="3"
                             Background="#707070"
                             VerticalAlignment="Bottom"
-                            Margin="14, 0, 0, 0"/>
+                            Margin="14,0,0,0" Grid.RowSpan="2"/>
                     <CheckBox x:Name="Suitable"
                               Grid.Row="1" Grid.Column="0"
-                              Margin="14, 15, 0, 0"
+                              Margin="14,15,0,0"
                               IsThreeState="False" FontWeight="DemiBold"
-                              Height="20" Content="Непригодный"/>
+                              Height="20" Content="Пригодность"/>
                     <StackPanel Grid.Row="2" Grid.Column="0">
                         <TextBlock FontSize="12" FontWeight="DemiBold"
                                    Margin="14, 15, 0, 0"
@@ -263,7 +263,7 @@
                                  BorderBrush="#c7c7c9" Background="#FFE0E0E0"
                                  Text="{Binding Responsible}"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
+                    <StackPanel Grid.Row="3" Grid.ColumnSpan="3">
                         <TextBlock FontSize="12" FontWeight="DemiBold"
                                    Margin="14, 15, 0, 0"
                                    Foreground="#707070">
