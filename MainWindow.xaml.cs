@@ -27,6 +27,7 @@ public partial class MainWindow : System.Windows.Window
         AlertDevicesGrid.ItemsSource = GetAlertDevices();
         AllDevicesGrid.ItemsSource = GetDevices();
         AllUsersGrid.ItemsSource = GetUsers();
+        AllVerificationsGrid.ItemsSource = GetVerifications();
         LoadTypes();
         Notifications();
 
@@ -34,15 +35,19 @@ public partial class MainWindow : System.Windows.Window
         {
             case 1:
                 Users.Visibility = Visibility.Visible;
+                DeviceType.Visibility = Visibility.Visible;
                 AddButton.Visibility = Visibility.Visible;
+                AddVerificationButton.Visibility = Visibility.Visible;
                 break;
             case 2:
                 Users.Visibility = Visibility.Collapsed;
                 AddButton.Visibility = Visibility.Collapsed;
+                AddVerificationButton.Visibility = Visibility.Collapsed;
                 break;
             case 3:
                 Users.Visibility = Visibility.Collapsed;
                 AddButton.Visibility = Visibility.Visible;
+                AddVerificationButton.Visibility = Visibility.Visible;
                 break;
             default:
                 break;
@@ -103,7 +108,7 @@ public partial class MainWindow : System.Windows.Window
     {
         using (PostgresContext db = new PostgresContext())
         {
-            if(id > 0 && searchQuery.Length > 0)
+            if(id > 0 && !string.IsNullOrEmpty(searchQuery))
             {
                 return db.Measurementdevices
                          .Include(d => d.Type)
@@ -123,7 +128,7 @@ public partial class MainWindow : System.Windows.Window
                          })
                          .ToList();
             }
-            if(id == 0 && searchQuery.Length > 0)
+            if(id == 0 && !string.IsNullOrEmpty(searchQuery))
             {
                 return db.Measurementdevices
                          .Include(d => d.Type)
@@ -142,7 +147,7 @@ public partial class MainWindow : System.Windows.Window
                          })
                          .ToList();
             }
-            if (id > 0 && searchQuery.Length == 0)
+            if (id > 0 && !string.IsNullOrEmpty(searchQuery))
             {
                 return db.Measurementdevices
                          .Where(d => d.Typeid == id)
@@ -291,7 +296,7 @@ public partial class MainWindow : System.Windows.Window
     {
         using(var db = new PostgresContext())
         {
-            if (searchQuery.Length > 0)
+            if (!string.IsNullOrEmpty(searchQuery))
             {
                 return db.Users
                        .Include(u => u.Role)
@@ -433,27 +438,90 @@ public partial class MainWindow : System.Windows.Window
     #region Протоколы
     private List<VerificationsView> GetVerifications()
     {
-
+        using (PostgresContext db = new PostgresContext())
+        {
+            return db.Verifications
+                .Include(v => v.Measurementdevice)
+                .Select(v => new VerificationsView
+                {
+                    Id = v.Id,
+                    Organization = v.Organization,
+                    Certificatenumber = v.Certificatenumber,
+                    Verificationdate = v.Verificationdate,
+                    Nextverificationdate = v.Nextverificationdate,
+                    Suitable = v.Suitable,
+                    VSearialnumber = v.Measurementdevice.Serialnumber,
+                    VMeasurementdevice = v.Measurementdevice.Name
+                })
+                .ToList();
+        }
     }
-    private List<VerificationsView> GetSearchedVerifications()
+    private List<VerificationsView> GetSearchedVerifications(string searchQuery)
     {
-
+        using(PostgresContext db = new PostgresContext())
+        {
+            if(!string.IsNullOrEmpty(searchQuery))
+            {
+                return db.Verifications
+                    .Include(v => v.Measurementdevice)
+                    .Where(v => 
+                        EF.Functions.ILike(v.Certificatenumber, $"%{searchQuery}%") ||
+                        EF.Functions.ILike(v.Organization, $"%{searchQuery}%") ||
+                        EF.Functions.ILike(v.Measurementdevice.Name, $"%{searchQuery}%") ||
+                        EF.Functions.ILike(v.Measurementdevice.Serialnumber, $"%{searchQuery}%")
+                        )
+                    .Select(v => new VerificationsView
+                    {
+                        Id = v.Id,
+                        Organization = v.Organization,
+                        Certificatenumber = v.Certificatenumber,
+                        Verificationdate = v.Verificationdate,
+                        Nextverificationdate = v.Nextverificationdate,
+                        Suitable = v.Suitable,
+                        VSearialnumber = v.Measurementdevice.Serialnumber,
+                        VMeasurementdevice = v.Measurementdevice.Name
+                    })
+                    .ToList();
+            }
+            else 
+                return GetVerifications();
+        }
     }
     private void AddVerificationButton_Click(object sender, RoutedEventArgs e)
     {
-
+        Verification verification = new Verification();
+        VerificationWindow window = new VerificationWindow(verification);
+        window.Owner = this;
+        window.ShowDialog();
+        AllVerificationsGrid.ItemsSource = GetSearchedVerifications(VerificationSearch.Text);
     }
     private void VerificationSearch_TextChanged(object sender, TextChangedEventArgs e)
     {
-
+        AllVerificationsGrid.ItemsSource = GetSearchedVerifications(VerificationSearch.Text);
     }
     private void AllVerificationsGrid_LoadingRow(object sender, DataGridRowEventArgs e)
     {
-
+        e.Row.Header = (e.Row.GetIndex() + 1).ToString();
     }
     private void AllVerificationsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
+        if (AllVerificationsGrid.SelectedItem is VerificationsView selectedVerify)
+        {
+            using (PostgresContext db = new PostgresContext())
+            {
+                var verify = db.Verifications
+                    .Include(d => d.Measurementdevice)
+                    .FirstOrDefault(d => d.Id == selectedVerify.Id);
 
+                if (verify != null)
+                {
+                    VerificationWindow window = new VerificationWindow(verify);
+                    window.Owner = this;
+                    window.ShowDialog();
+                    AllVerificationsGrid.ItemsSource = GetSearchedVerifications(UsersSearch.Text);
+                }
+            }
+        }
     }
     #endregion
 }

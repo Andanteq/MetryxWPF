@@ -13,15 +13,17 @@ public partial class Verification
 
     public DateOnly Verificationdate { get; set; }
 
-    public DateOnly? Nextverificationdate { get; set; }
-
-    public string? Result { get; set; }
+    public DateOnly Nextverificationdate { get; set; }
 
     public bool? Suitable { get; set; }
 
     public int Measurementdeviceid { get; set; }
 
+    public int Verificationtypeid { get; set; }
+
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
     public virtual Measurementdevice Measurementdevice { get; set; } = null!;
+
+    public virtual Verificationtype Verificationtype { get; set; } = null!;
 }

@@ -27,7 +27,5 @@ public partial class User
 
     public virtual ICollection<Measurementdevice> Measurementdevices { get; set; } = new List<Measurementdevice>();
 
-    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-
     public virtual Role Role { get; set; } = null!;
 }

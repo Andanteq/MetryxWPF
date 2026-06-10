@@ -63,7 +63,7 @@ namespace MetryxWPF
                         MessageBox.Show("Заполните пароль");
                         return;
                     }
-                    db.Users.Add(InsertData(user));
+                    db.Users.Add(InsertUserData(user));
                     db.SaveChanges();
                 }
                 else
@@ -76,7 +76,7 @@ namespace MetryxWPF
                         return;
                     }
 
-                    InsertData(existingUser);
+                    InsertUserData(existingUser);
                     db.SaveChanges();
                 }
             }
@@ -106,7 +106,7 @@ namespace MetryxWPF
             }
             else return;
         }
-        private User InsertData(User user)
+        private User InsertUserData(User user)
         {
             user.Lastname = LastName.Text;
             user.Firstname = FirstName.Text;

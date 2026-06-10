@@ -180,6 +180,12 @@
                                 <DataGridTextColumn Header="Действительна до"
                                                     Binding="{Binding Nextverificationdate}"
                                                     Width="*"/>
+                                <DataGridTextColumn Header="Заводской №"
+                                                    Binding="{Binding VSearialnumber}"
+                                                    Width="*"/>
+                                <DataGridTextColumn Header="Прибор"
+                                                    Binding="{Binding VMeasurementdevice}"
+                                                    Width="*"/>
                                 <DataGridTextColumn Binding="{Binding Certificatenumber}"
                                                     Width="*">
                                     <DataGridTextColumn.Header>
@@ -188,9 +194,28 @@
                                                    HorizontalAlignment="Center"/>
                                     </DataGridTextColumn.Header>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Header="Пригодность"
-                                                    Binding="{Binding Suitable}"
-                                                    Width="*"/>
+                                <DataGridTemplateColumn Header="Пригодность">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       FontSize="16">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text"
+                                                                Value="✗"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Suitable}"
+                                                                         Value="True">
+                                                                <Setter Property="Text"
+                                                                        Value="✓"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -249,48 +274,50 @@
                                       SelectedValuePath="Id">
                             </ComboBox>
                         </Grid>
-                        <DataGrid x:Name="AllDevicesGrid" Grid.Row="3" Grid.ColumnSpan="2" Background="White"
-                                  LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 10, 14, 20"
-                                  FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
-                                  ColumnWidth="SizeToHeader"
-                                  AutoGenerateColumns="False"
-                                  HeadersVisibility="Column"
-                                  RowHeaderWidth="0"
-                                  MouseDoubleClick="AllDevicesGrid_MouseDoubleClick">
-                            <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="№"
-                                                    Width="40"
-                                                    IsReadOnly="True">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
-                                                                        Path=Header}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Наименование"
-                                                    Binding="{Binding Name}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Тип прибора"
-                                                    Binding="{Binding TypeName}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Заводской номер"
-                                                    Binding="{Binding Serialnumber}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Периодичность"
-                                                    Binding="{Binding Verificationinterval}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Последняя поверка"
-                                                    Binding="{Binding Lastverificationdate}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Следующая поверка"
-                                                    Binding="{Binding Nextverificationdate,
-                                                                      TargetNullValue='Не указана'}"
-                                                    Width="*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <ScrollViewer Grid.Row="3" Grid.ColumnSpan="2">
+                            <DataGrid x:Name="AllDevicesGrid" Background="White"
+          LoadingRow="AllDevicesGrid_LoadingRow" Margin="14, 10, 14, 20"
+          FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
+          ColumnWidth="SizeToHeader"
+          AutoGenerateColumns="False"
+          HeadersVisibility="Column"
+          RowHeaderWidth="0"
+          MouseDoubleClick="AllDevicesGrid_MouseDoubleClick">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="№"
+                            Width="40"
+                            IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                Path=Header}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Наименование"
+                            Binding="{Binding Name}"
+                            Width="*"/>
+                                    <DataGridTextColumn Header="Тип прибора"
+                            Binding="{Binding TypeName}"
+                            Width="*"/>
+                                    <DataGridTextColumn Header="Заводской номер"
+                            Binding="{Binding Serialnumber}"
+                            Width="*"/>
+                                    <DataGridTextColumn Header="Периодичность"
+                            Binding="{Binding Verificationinterval}"
+                            Width="*"/>
+                                    <DataGridTextColumn Header="Последняя поверка"
+                            Binding="{Binding Lastverificationdate}"
+                            Width="*"/>
+                                    <DataGridTextColumn Header="Следующая поверка"
+                            Binding="{Binding Nextverificationdate,
+                                              TargetNullValue='Не указана'}"
+                            Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
                     </Grid>
                 </TabItem.Content>
             </TabItem>
@@ -335,44 +362,46 @@
                                  VerticalScrollBarVisibility="Disabled" BorderBrush="#c7c7c9"
                                  TextChanged="UsersSearch_TextChanged">
                         </TextBox>
-                        <DataGrid x:Name="AllUsersGrid" Grid.Row="3" Grid.ColumnSpan="2" Background="White"
-                                  LoadingRow="AllUsersGrid_LoadingRow" Margin="14, 10, 45, 20"
-                                  FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
-                                  ColumnWidth="SizeToHeader"
-                                  AutoGenerateColumns="False"
-                                  HeadersVisibility="Column"
-                                  RowHeaderWidth="0"
-                                  MouseDoubleClick="AllUsersGrid_MouseDoubleClick">
-                            <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="№"
-                                                        Width="40"
-                                                        IsReadOnly="True">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
-                                                                        Path=Header}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Фамилия"
-                                                    Binding="{Binding Lastname}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Имя"
-                                                    Binding="{Binding Firstname}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Отчество"
-                                                    Binding="{Binding Middlename}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Роль"
-                                                    Binding="{Binding RoleName}"
-                                                    Width="*"/>
-                                <DataGridTextColumn Header="Номер телефона"
-                                                    Binding="{Binding Phonenumber}"
-                                                    Width="*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <ScrollViewer Grid.Row="3" Grid.ColumnSpan="2">
+                            <DataGrid x:Name="AllUsersGrid" Background="White"
+          LoadingRow="AllUsersGrid_LoadingRow" Margin="14, 10, 45, 20"
+          FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
+          ColumnWidth="SizeToHeader"
+          AutoGenerateColumns="False"
+          HeadersVisibility="Column"
+          RowHeaderWidth="0"
+          MouseDoubleClick="AllUsersGrid_MouseDoubleClick">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="№"
+                                Width="40"
+                                IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                Path=Header}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Фамилия"
+                            Binding="{Binding Lastname}"
+                            Width="*"/>
+                                    <DataGridTextColumn Header="Имя"
+                            Binding="{Binding Firstname}"
+                            Width="*"/>
+                                    <DataGridTextColumn Header="Отчество"
+                            Binding="{Binding Middlename}"
+                            Width="*"/>
+                                    <DataGridTextColumn Header="Роль"
+                            Binding="{Binding RoleName}"
+                            Width="*"/>
+                                    <DataGridTextColumn Header="Номер телефона"
+                            Binding="{Binding Phonenumber}"
+                            Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
                     </Grid>
                 </TabItem.Content>
             </TabItem>
@@ -408,57 +437,59 @@
                                 +
                             </Button>
                         </Grid>
-                        <DataGrid x:Name="TypesGrid" Grid.Row="2" Background="White" Margin="14, 10, 45, 20"
-                                  FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
-                                  ColumnWidth="SizeToHeader"
-                                  AutoGenerateColumns="False"
-                                  HeadersVisibility="Column"
-                                  RowHeaderWidth="0"
-                                  CanUserAddRows="False"
-                                  SelectionMode="Single"
-                                  LoadingRow="TypesGrid_LoadingRow"
-                                  RowEditEnding="TypesGrid_RowEditEnding">
-                            <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="№"
-                                                        Width="50"
-                                                        IsReadOnly="True">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
-                                                                        Path=Header}"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Тип прибора"
-                                                    Binding="{Binding Name}"
-                                                    Width="*"/>
-                                <DataGridTemplateColumn Width="100">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button x:Name="DeleteButton"
-                                                    Content="Удалить"
-                                                    Tag="{Binding}"
-                                                    Click="DeleteButton_Click">
-                                                <Button.Style>
-                                                    <Style TargetType="Button">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
-                                                                         Path=IsSelected}" Value="True">
-                                                                <Setter Property="Visibility"
-                                                                        Value="Visible"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <ScrollViewer Grid.Row="2">
+                            <DataGrid x:Name="TypesGrid" Background="White" Margin="14, 10, 45, 20"
+                                      FontSize="15" Padding="0" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="Black"
+                                      ColumnWidth="SizeToHeader"
+                                      AutoGenerateColumns="False"
+                                      HeadersVisibility="Column"
+                                      RowHeaderWidth="0"
+                                      CanUserAddRows="False"
+                                      SelectionMode="Single"
+                                      LoadingRow="TypesGrid_LoadingRow"
+                                      RowEditEnding="TypesGrid_RowEditEnding">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="№"
+                                                            Width="50"
+                                                            IsReadOnly="True">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                                            Path=Header}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Тип прибора"
+                            Binding="{Binding Name}"
+                            Width="*"/>
+                                    <DataGridTemplateColumn Width="100">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button x:Name="DeleteButton"
+                            Content="Удалить"
+                            Tag="{Binding}"
+                            Click="DeleteButton_Click">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                 Path=IsSelected}" Value="True">
+                                                                    <Setter Property="Visibility"
+                                                Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
                     </Grid>
                 </TabItem.Content>
             </TabItem>

@@ -21,13 +21,13 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Measurementdevice> Measurementdevices { get; set; }
 
-    public virtual DbSet<Notification> Notifications { get; set; }
-
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Verification> Verifications { get; set; }
+
+    public virtual DbSet<Verificationtype> Verificationtypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -101,7 +101,7 @@ public partial class PostgresContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("serialnumber");
             entity.Property(e => e.Typeid).HasColumnName("typeid");
-            entity.Property(e => e.Suitable).HasColumnName("unsuitable");
+            entity.Property(e => e.Suitable).HasColumnName("suitable");
             entity.Property(e => e.Userid).HasColumnName("userid");
             entity.Property(e => e.Responsible)
                 .HasColumnType("character varying")
@@ -118,33 +118,6 @@ public partial class PostgresContext : DbContext
                 .HasConstraintName("measurementdevice_user_fk");
         });
 
-        modelBuilder.Entity<Notification>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("notification_pk");
-
-            entity.ToTable("notification");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id");
-            entity.Property(e => e.Createdat).HasColumnName("createdat");
-            entity.Property(e => e.Isread).HasColumnName("isread");
-            entity.Property(e => e.Measurementdeviceid).HasColumnName("measurementdeviceid");
-            entity.Property(e => e.Message)
-                .HasColumnType("character varying")
-                .HasColumnName("message");
-            entity.Property(e => e.Userid).HasColumnName("userid");
-
-            entity.HasOne(d => d.Measurementdevice).WithMany(p => p.Notifications)
-                .HasForeignKey(d => d.Measurementdeviceid)
-                .HasConstraintName("notification_measurementdevice_fk");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Notifications)
-                .HasForeignKey(d => d.Userid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("notification_user_fk");
-        });
-
         modelBuilder.Entity<Role>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("role_pk");
@@ -155,6 +128,20 @@ public partial class PostgresContext : DbContext
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Name).HasColumnType("character varying");
+        });
+
+        modelBuilder.Entity<Verificationtype>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("verificationtype_pk");
+
+            entity.ToTable("verificationtype");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+            entity.Property(e => e.Name)
+                .HasColumnName("name")
+                .HasColumnType("character varying");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -206,17 +193,26 @@ public partial class PostgresContext : DbContext
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
             entity.Property(e => e.Measurementdeviceid).HasColumnName("measurementdeviceid");
+            entity.Property(e => e.Verificationtypeid).HasColumnName("verificationtypeid");
             entity.Property(e => e.Nextverificationdate).HasColumnName("nextverificationdate");
-            entity.Property(e => e.Result).HasColumnType("character varying");
-            entity.Property(e => e.Suitable).HasColumnName("unsuitable");
+            entity.Property(e => e.Suitable).HasColumnName("suitable");
             entity.Property(e => e.Verificationdate).HasColumnName("verificationdate");
-            entity.Property(e => e.Organization).HasColumnType("character varying");
-            entity.Property(e => e.Certificatenumber).HasColumnType("character varying");
+            entity.Property(e => e.Organization)
+                .HasColumnName("organization")
+                .HasColumnType("character varying");
+            entity.Property(e => e.Certificatenumber)
+                .HasColumnName("certificatenumber")
+                .HasColumnType("character varying");
 
             entity.HasOne(d => d.Measurementdevice).WithMany(p => p.Verifications)
                 .HasForeignKey(d => d.Measurementdeviceid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("verification_measurementdevice_fk");
+
+            entity.HasOne(d => d.Verificationtype).WithMany(p => p.Verifications)
+                .HasForeignKey(d => d.Verificationtypeid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("verification_verificationtype_fk");
         });
 
         OnModelCreatingPartial(modelBuilder);

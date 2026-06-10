@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MetryxWPF
 {
-    class MeasurementDeviceView
+    public class MeasurementDeviceView
     {
         public int Id { get; set; }
         public string Name { get; set; }
