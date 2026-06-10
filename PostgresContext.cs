@@ -21,8 +21,6 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Measurementdevice> Measurementdevices { get; set; }
 
-    public virtual DbSet<Notification> Notifications { get; set; }
-
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -118,33 +116,6 @@ public partial class PostgresContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Measurementdevices)
                 .HasForeignKey(d => d.Userid)
                 .HasConstraintName("measurementdevice_user_fk");
-        });
-
-        modelBuilder.Entity<Notification>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("notification_pk");
-
-            entity.ToTable("notification");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id");
-            entity.Property(e => e.Createdat).HasColumnName("createdat");
-            entity.Property(e => e.Isread).HasColumnName("isread");
-            entity.Property(e => e.Measurementdeviceid).HasColumnName("measurementdeviceid");
-            entity.Property(e => e.Message)
-                .HasColumnType("character varying")
-                .HasColumnName("message");
-            entity.Property(e => e.Userid).HasColumnName("userid");
-
-            entity.HasOne(d => d.Measurementdevice).WithMany(p => p.Notifications)
-                .HasForeignKey(d => d.Measurementdeviceid)
-                .HasConstraintName("notification_measurementdevice_fk");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Notifications)
-                .HasForeignKey(d => d.Userid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("notification_user_fk");
         });
 
         modelBuilder.Entity<Role>(entity =>

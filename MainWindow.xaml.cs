@@ -35,15 +35,19 @@ public partial class MainWindow : System.Windows.Window
         {
             case 1:
                 Users.Visibility = Visibility.Visible;
+                DeviceType.Visibility = Visibility.Visible;
                 AddButton.Visibility = Visibility.Visible;
+                AddVerificationButton.Visibility = Visibility.Visible;
                 break;
             case 2:
                 Users.Visibility = Visibility.Collapsed;
                 AddButton.Visibility = Visibility.Collapsed;
+                AddVerificationButton.Visibility = Visibility.Collapsed;
                 break;
             case 3:
                 Users.Visibility = Visibility.Collapsed;
                 AddButton.Visibility = Visibility.Visible;
+                AddVerificationButton.Visibility = Visibility.Visible;
                 break;
             default:
                 break;

@@ -27,6 +27,24 @@ namespace MetryxWPF
         {
             InitializeComponent();
 
+            switch (Session.CurrentUser.RoleId)
+            {
+                case 1:
+                    SaveButton.Visibility = Visibility.Visible;
+                    DeleteButton.Visibility = Visibility.Visible;
+                    break;
+                case 2:
+                    SaveButton.Visibility = Visibility.Collapsed;
+                    DeleteButton.Visibility = Visibility.Collapsed;
+                    break;
+                case 3:
+                    SaveButton.Visibility = Visibility.Visible;
+                    DeleteButton.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    break;
+            }
+
             DataContext = verification;
 
             using (PostgresContext db = new PostgresContext())

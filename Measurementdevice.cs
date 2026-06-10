@@ -33,8 +33,6 @@ public partial class Measurementdevice
 
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
-    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-
     public virtual Devicetype Type { get; set; } = null!;
 
     public virtual User? User { get; set; }
