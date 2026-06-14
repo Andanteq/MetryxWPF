@@ -17,6 +17,8 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Devicetype> Devicetypes { get; set; }
 
+    public virtual DbSet<Species> Species { get; set; }
+
     public virtual DbSet<Document> Documents { get; set; }
 
     public virtual DbSet<Measurementdevice> Measurementdevices { get; set; }
@@ -42,6 +44,19 @@ public partial class PostgresContext : DbContext
             entity.HasKey(e => e.Id).HasName("devicetype_pk");
 
             entity.ToTable("devicetype");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+            entity.Property(e => e.Name).HasColumnType("character varying");
+            entity.Property(e => e.Speciesid).HasColumnName("speciesid");
+        });
+
+        modelBuilder.Entity<Species>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("species_pk");
+
+            entity.ToTable("species");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()

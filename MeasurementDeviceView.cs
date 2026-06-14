@@ -15,7 +15,7 @@ namespace MetryxWPF
 
         public string Serialnumber { get; set; }
 
-        public int? Verificationinterval { get; set; }
+        public string SpeciesName { get; set; }
 
         public DateOnly Lastverificationdate { get; set; }
 

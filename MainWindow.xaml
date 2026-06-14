@@ -8,6 +8,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="624" Width="1237"
         WindowState="Maximized">
+    <Window.Resources>
+        <CollectionViewSource x:Key="SpeciesSource"/>
+    </Window.Resources>
     <Grid Background="#FFE0E0E0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -90,14 +93,14 @@
                             <DataGridTextColumn Header="Наименование"
                                                 Binding="{Binding Name}"
                                                 Width="*"/>
+                            <DataGridTextColumn Header="Вид прибора"
+                                                Binding="{Binding SpeciesName}"
+                                                Width="*"/>
                             <DataGridTextColumn Header="Тип прибора"
                                                 Binding="{Binding TypeName}"
                                                 Width="*"/>
                             <DataGridTextColumn Header="Заводской номер"
                                                 Binding="{Binding Serialnumber}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Периодичность"
-                                                Binding="{Binding Verificationinterval}"
                                                 Width="*"/>
                             <DataGridTextColumn Header="Последняя поверка"
                                                 Binding="{Binding Lastverificationdate}"
@@ -299,14 +302,14 @@
                                     <DataGridTextColumn Header="Наименование"
                             Binding="{Binding Name}"
                             Width="*"/>
+                                    <DataGridTextColumn Header="Вид прибора"
+                            Binding="{Binding SpeciesName}"
+                            Width="*"/>
                                     <DataGridTextColumn Header="Тип прибора"
                             Binding="{Binding TypeName}"
                             Width="*"/>
                                     <DataGridTextColumn Header="Заводской номер"
                             Binding="{Binding Serialnumber}"
-                            Width="*"/>
-                                    <DataGridTextColumn Header="Периодичность"
-                            Binding="{Binding Verificationinterval}"
                             Width="*"/>
                                     <DataGridTextColumn Header="Последняя поверка"
                             Binding="{Binding Lastverificationdate}"
@@ -464,6 +467,12 @@
                                     <DataGridTextColumn Header="Тип прибора"
                             Binding="{Binding Name}"
                             Width="*"/>
+                                    <DataGridComboBoxColumn Header="Вид прибора"
+                                                            
+                                                            SelectedValueBinding="{Binding Id}"
+                                                            SelectedValuePath="Id"
+                                                            DisplayMemberPath="Name"
+                                                            ItemsSource="{Binding Source={StaticResource SpeciesSource}}"/>
                                     <DataGridTemplateColumn Width="100">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>

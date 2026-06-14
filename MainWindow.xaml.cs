@@ -96,7 +96,7 @@ public partial class MainWindow : System.Windows.Window
                          Name = d.Name,
                          TypeName = d.Type.Name,
                          Serialnumber = d.Serialnumber,
-                         Verificationinterval = d.Verificationinterval,
+                         SpeciesName = d.Type.Species.Name,
                          Lastverificationdate = d.Lastverificationdate,
                          Nextverificationdate = d.Nextverificationdate
                      })
@@ -122,7 +122,7 @@ public partial class MainWindow : System.Windows.Window
                              Name = d.Name,
                              TypeName = d.Type.Name,
                              Serialnumber = d.Serialnumber,
-                             Verificationinterval = d.Verificationinterval,
+                             SpeciesName = d.Type.Species.Name,
                              Lastverificationdate = d.Lastverificationdate,
                              Nextverificationdate = d.Nextverificationdate
                          })
@@ -141,7 +141,7 @@ public partial class MainWindow : System.Windows.Window
                              Name = d.Name,
                              TypeName = d.Type.Name,
                              Serialnumber = d.Serialnumber,
-                             Verificationinterval = d.Verificationinterval,
+                             SpeciesName = d.Type.Species.Name,
                              Lastverificationdate = d.Lastverificationdate,
                              Nextverificationdate = d.Nextverificationdate
                          })
@@ -158,7 +158,7 @@ public partial class MainWindow : System.Windows.Window
                              Name = d.Name,
                              TypeName = d.Type.Name,
                              Serialnumber = d.Serialnumber,
-                             Verificationinterval = d.Verificationinterval,
+                             SpeciesName = d.Type.Species.Name,
                              Lastverificationdate = d.Lastverificationdate,
                              Nextverificationdate = d.Nextverificationdate
                          })
@@ -243,7 +243,7 @@ public partial class MainWindow : System.Windows.Window
                            Name = d.Name,
                            TypeName = d.Type.Name,
                            Serialnumber = d.Serialnumber,
-                           Verificationinterval = d.Verificationinterval,
+                           SpeciesName = d.Type.Species.Name,
                            Lastverificationdate = d.Lastverificationdate,
                            Nextverificationdate = d.Nextverificationdate,
                            VerificationStatus = status,
@@ -360,6 +360,7 @@ public partial class MainWindow : System.Windows.Window
 
     #region Типы
     private ObservableCollection<Devicetype> _types;
+    private List<Species> _species;
 
     private void LoadTypes()
     {
@@ -367,9 +368,11 @@ public partial class MainWindow : System.Windows.Window
         {
             _types = new ObservableCollection<Devicetype>(
                 db.Devicetypes.OrderBy(t => t.Name).ToList());
+            _species = db.Species.ToList();
 
             TypesGrid.ItemsSource = _types;
         }
+        ((CollectionViewSource)FindResource("KindsSource")).Source = _species;
     }
     private void AddTypeButton_Click(object sender, RoutedEventArgs e)
     {
