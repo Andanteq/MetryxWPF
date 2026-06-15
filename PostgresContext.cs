@@ -61,7 +61,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
-            entity.Property(e => e.Name).HasColumnType("character varying");
+            entity.Property(e => e.Name)
+                .HasColumnType("character varying")
+                .HasColumnName("name");
         });
 
         modelBuilder.Entity<Document>(entity =>
@@ -116,6 +118,7 @@ public partial class PostgresContext : DbContext
                 .HasColumnType("character varying")
                 .HasColumnName("serialnumber");
             entity.Property(e => e.Typeid).HasColumnName("typeid");
+            entity.Property(e => e.Speciesid).HasColumnName("speciesid");
             entity.Property(e => e.Suitable).HasColumnName("suitable");
             entity.Property(e => e.Userid).HasColumnName("userid");
             entity.Property(e => e.Responsible)
@@ -127,6 +130,11 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => d.Typeid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("measurementdevice_devicetype_fk");
+
+            entity.HasOne(d => d.Species).WithMany(p => p.Measurementdevices)
+                .HasForeignKey(d => d.Speciesid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("measurementdevice_species_fk");
 
             entity.HasOne(d => d.User).WithMany(p => p.Measurementdevices)
                 .HasForeignKey(d => d.Userid)

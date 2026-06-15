@@ -13,5 +13,7 @@ namespace MetryxWPF
         public string Name { get; set; } = null!;
 
         public virtual ICollection<Devicetype> Devicetypes { get; set; } = new List<Devicetype>();
+
+        public virtual ICollection<Measurementdevice> Measurementdevices { get; set; } = new List<Measurementdevice>();
     }
 }

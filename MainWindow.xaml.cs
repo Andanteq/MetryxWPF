@@ -96,7 +96,6 @@ public partial class MainWindow : System.Windows.Window
                          Name = d.Name,
                          TypeName = d.Type.Name,
                          Serialnumber = d.Serialnumber,
-                         SpeciesName = d.Type.Species.Name,
                          Lastverificationdate = d.Lastverificationdate,
                          Nextverificationdate = d.Nextverificationdate
                      })
@@ -372,7 +371,7 @@ public partial class MainWindow : System.Windows.Window
 
             TypesGrid.ItemsSource = _types;
         }
-        ((CollectionViewSource)FindResource("KindsSource")).Source = _species;
+        ((CollectionViewSource)FindResource("SpeciesSource")).Source = _species;
     }
     private void AddTypeButton_Click(object sender, RoutedEventArgs e)
     {
@@ -492,6 +491,16 @@ public partial class MainWindow : System.Windows.Window
     }
     private void AddVerificationButton_Click(object sender, RoutedEventArgs e)
     {
+        int count = 0;
+        using(var db = new PostgresContext())
+        {
+            count = db.Measurementdevices.Count();
+        }
+        if(count == 0)
+        {
+            System.Windows.MessageBox.Show("Невозможно добавить протокол т.к. в базе отсутствуют приборы");
+            return;
+        }
         Verification verification = new Verification();
         VerificationWindow window = new VerificationWindow(verification);
         window.Owner = this;

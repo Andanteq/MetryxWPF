@@ -465,15 +465,14 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                     <DataGridTextColumn Header="Тип прибора"
-                            Binding="{Binding Name}"
-                            Width="*"/>
+                                                        Binding="{Binding Name}"
+                                                        Width="250"/>
                                     <DataGridComboBoxColumn Header="Вид прибора"
-                                                            
-                                                            SelectedValueBinding="{Binding Id}"
+                                                            SelectedValueBinding="{Binding Speciesid}"
                                                             SelectedValuePath="Id"
                                                             DisplayMemberPath="Name"
                                                             ItemsSource="{Binding Source={StaticResource SpeciesSource}}"/>
-                                    <DataGridTemplateColumn Width="100">
+                                    <DataGridTemplateColumn Width="250">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button x:Name="DeleteButton"

@@ -11,6 +11,8 @@ public partial class Measurementdevice
 
     public int Typeid { get; set; }
 
+    public int Speciesid { get; set; }
+
     public string Serialnumber { get; set; } = null!;
 
     public DateOnly Releasedate { get; set; }
@@ -34,6 +36,8 @@ public partial class Measurementdevice
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 
     public virtual Devicetype Type { get; set; } = null!;
+
+    public virtual Species Species { get; set; }
 
     public virtual User? User { get; set; }
 

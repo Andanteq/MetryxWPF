@@ -17,6 +17,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid>
             <Grid.RowDefinitions>
@@ -63,6 +64,18 @@
         <StackPanel Grid.Row="3">
             <TextBlock FontSize="12" FontWeight="DemiBold" 
                        Margin="14, 10, 0, 4">
+                <Run>Вид прибора</Run>
+                <Run Foreground="Red">*</Run>
+            </TextBlock>
+            <ComboBox x:Name="DeviceSpecies" Margin="14, 0, 14, 0" 
+                      hc:BorderElement.CornerRadius="7" 
+                      BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Id"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4">
+            <TextBlock FontSize="12" FontWeight="DemiBold" 
+                       Margin="14, 10, 0, 4">
                 <Run>Заводской номер</Run>
                 <Run Foreground="Red">*</Run>
             </TextBlock>
@@ -71,7 +84,7 @@
                      BorderBrush="#c7c7c9" Background="#FFE0E0E0">
             </TextBox>
         </StackPanel>
-        <StackPanel Grid.Row="4">
+        <StackPanel Grid.Row="5">
             <TextBlock FontSize="12" FontWeight="DemiBold" 
                        Margin="14, 10, 0, 4">
                 <Run>Дата выпуска</Run>
@@ -93,7 +106,7 @@
                 </DatePicker.Resources>
             </DatePicker>
         </StackPanel>
-        <StackPanel Grid.Row="5">
+        <StackPanel Grid.Row="6">
             <TextBlock FontSize="12" FontWeight="DemiBold" 
                        Margin="14, 10, 0, 4">
                 <Run>Дата последней поверки</Run>
@@ -115,7 +128,7 @@
                 </DatePicker.Resources>
             </DatePicker>
         </StackPanel>
-        <Grid Grid.Row="6" Margin="0, 20, 0, 0">
+        <Grid Grid.Row="7" Margin="0, 20, 0, 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>

@@ -29,7 +29,11 @@ namespace MetryxWPF
                 var types = db.Devicetypes
                             .Select(t => new Devicetype { Id = t.Id, Name = t.Name })
                             .ToList();
+                var species = db.Species
+                                .Select(s => new Species { Id = s.Id, Name = s.Name })
+                                .ToList();
 
+                DeviceSpecies.ItemsSource = species;
                 DeviceType.ItemsSource = types;
             }
         }
@@ -53,6 +57,7 @@ namespace MetryxWPF
                 {
                     Name = DeviceName.Text,
                     Typeid = (int)DeviceType.SelectedValue,
+                    Speciesid = (int)DeviceSpecies.SelectedValue,
                     Serialnumber = DeviceSerialNumber.Text,
                     Releasedate = DateOnly.FromDateTime(DeviceReleaseDate.SelectedDate.Value.Date),
                     Lastverificationdate = DateOnly.FromDateTime(DeviceLastverificationDate.SelectedDate.Value.Date)

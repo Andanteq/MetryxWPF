@@ -48,10 +48,13 @@ namespace MetryxWPF
             using (PostgresContext db = new PostgresContext())
             {
                 var types = db.Devicetypes.ToList();
+                var species = db.Species.ToList();
 
+                DeviceSpecies.ItemsSource = species;
                 DeviceType.ItemsSource = types;
             }
 
+            DeviceSpecies.SelectedValue = device.Speciesid;
             DeviceType.SelectedValue = device.Typeid;
 
             DeviceReleaseDate.SelectedDate = device.Releasedate.ToDateTime(TimeOnly.MinValue);
@@ -79,6 +82,7 @@ namespace MetryxWPF
 
                 existingDevice.Name = DeviceName.Text;
                 existingDevice.Typeid = (int)DeviceType.SelectedValue;
+                existingDevice.Speciesid = (int)DeviceSpecies.SelectedValue;
                 existingDevice.Serialnumber = DeviceSerialnumber.Text;
 
                 existingDevice.Releasedate =
@@ -219,6 +223,28 @@ namespace MetryxWPF
                 DeviceNextVerificationDate.SelectedDate = DeviceLastVerificationDate.SelectedDate.Value.AddMonths(Convert.ToInt32(DeviceVerificationInterval.Text));
             else
                 MessageBox.Show("Введите межповерочный интервал");
+        }
+
+        private void DeviceSpecies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            using (var db = new PostgresContext())
+            {
+                var types = db.Devicetypes
+                            .Where(s => s.Speciesid == (int)DeviceSpecies.SelectedValue)
+                            .ToList();
+                DeviceType.ItemsSource = types;
+            }
+        }
+
+        private void DeviceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            using(var db = new PostgresContext())
+            {
+                Devicetype type = db.Devicetypes
+                            .Where(t => t.Id == DeviceType.SelectedIndex) as Devicetype;
+
+                DeviceSpecies.SelectedValue = type.Speciesid;
+            }
         }
     }
 }
