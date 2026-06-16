@@ -21,6 +21,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Grid.Column="0">
                     <Grid.RowDefinitions>
@@ -65,9 +66,9 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
@@ -81,13 +82,13 @@
                             Background="#707070"
                             VerticalAlignment="Bottom"
                             Margin="14, 0, 0, 0"/>
-                    <StackPanel Grid.Row="1" Grid.Column="0">
+                    <StackPanel Grid.Row="1" Grid.Column="2">
                         <TextBlock FontSize="12" FontWeight="DemiBold"
-                                   Margin="14, 15, 0, 0">
+                                   Margin="7, 15, 0, 0">
                             <Run Foreground="#707070">Наименование</Run>
                             <Run Foreground="Red">*</Run>
                         </TextBlock>
-                        <TextBox x:Name="DeviceName" Margin="14, 4, 7, 0" 
+                        <TextBox x:Name="DeviceName" Margin="7, 4, 7, 0" 
                                  hс:BorderElement.CornerRadius="7" 
                                  BorderBrush="#c7c7c9" Background="#FFE0E0E0"
                                  Text="{Binding Name}"/>
@@ -98,12 +99,31 @@
                             <Run Foreground="#707070">Тип прибора</Run>
                             <Run Foreground="Red">*</Run>
                         </TextBlock>
-                        <ComboBox x:Name="DeviceType" Margin="7, 4, 0, 0" 
+                        <ComboBox x:Name="DeviceType" Margin="7, 4, 7, 0" 
                                   hс:BorderElement.CornerRadius="7" 
                                   BorderBrush="#c7c7c9" Background="#FFE0E0E0"
                                   DisplayMemberPath="Name"
                                   SelectedValuePath="Id"/>
                     </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="0">
+                        <TextBlock FontSize="12" FontWeight="DemiBold"
+                                   Margin="14, 15, 0, 0">
+                            <Run Foreground="#707070">Вид прибора</Run>
+                            <Run Foreground="Red">*</Run>
+                        </TextBlock>
+                        <ComboBox x:Name="DeviceSpecies" Margin="14, 4, 7, 0" 
+                                  hс:BorderElement.CornerRadius="7" 
+                                  BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+                                  DisplayMemberPath="Name"
+                                  SelectedValuePath="Id" 
+                                  SelectionChanged="DeviceSpecies_SelectionChanged"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
                     <StackPanel Grid.Row="2" Grid.Column="0">
                         <TextBlock FontSize="12" FontWeight="DemiBold"
                                    Margin="14, 15, 0, 0">
@@ -111,9 +131,9 @@
                             <Run Foreground="Red">*</Run>
                         </TextBlock>
                         <TextBox x:Name="DeviceSerialnumber" Margin="14, 4, 7, 0" 
-                                 hс:BorderElement.CornerRadius="7" 
-                                 BorderBrush="#c7c7c9" Background="#FFE0E0E0"
-                                 Text="{Binding Serialnumber}"/>
+             hс:BorderElement.CornerRadius="7" 
+             BorderBrush="#c7c7c9" Background="#FFE0E0E0"
+             Text="{Binding Serialnumber}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1">
                         <TextBlock FontSize="12" FontWeight="DemiBold"
@@ -138,7 +158,7 @@
                         </DatePicker>
                     </StackPanel>
                 </Grid>
-                <Grid Grid.Row="2" Grid.Column="0">
+                <Grid Grid.Row="3" Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -215,7 +235,7 @@
                         </DatePicker>
                     </StackPanel>
                 </Grid>
-                <Grid Grid.Row="3" Grid.Column="0">
+                <Grid Grid.Row="4" Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -229,18 +249,19 @@
                     <TextBlock Grid.Row="0" Grid.ColumnSpan="3"
                                FontSize="20" FontWeight="DemiBold"
                                Margin="14,10,0,10">
-                        Экспулатация
+                        Эксплуатация
                     </TextBlock>
                     <Border Height="1"
                             Grid.Row="0" Grid.ColumnSpan="3"
                             Background="#707070"
                             VerticalAlignment="Bottom"
-                            Margin="14,0,0,0" Grid.RowSpan="2"/>
+                            Margin="14,0,0,0"/>
                     <CheckBox x:Name="Suitable"
                               Grid.Row="1" Grid.Column="0"
                               Margin="14,15,0,0"
                               IsThreeState="False" FontWeight="DemiBold"
-                              Height="20" Content="Пригодность"/>
+                              Height="20" Content="Пригодность"
+                              IsChecked="{Binding Suitable}"/>
                     <StackPanel Grid.Row="2" Grid.Column="0">
                         <TextBlock FontSize="12" FontWeight="DemiBold"
                                    Margin="14, 15, 0, 0"
@@ -276,7 +297,7 @@
                                  Text="{Binding Note}"/>
                     </StackPanel>
                 </Grid>
-                <Grid Grid.Row="4">
+                <Grid Grid.Row="5">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>

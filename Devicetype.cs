@@ -9,5 +9,9 @@ public partial class Devicetype
 
     public string Name { get; set; } = null!;
 
+    public int Speciesid { get; set; }
+
     public virtual ICollection<Measurementdevice> Measurementdevices { get; set; } = new List<Measurementdevice>();
+
+    public virtual Species Species { get; set; } = null!;
 }

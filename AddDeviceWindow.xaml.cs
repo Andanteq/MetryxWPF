@@ -29,7 +29,11 @@ namespace MetryxWPF
                 var types = db.Devicetypes
                             .Select(t => new Devicetype { Id = t.Id, Name = t.Name })
                             .ToList();
+                var species = db.Species
+                                .Select(s => new Species { Id = s.Id, Name = s.Name })
+                                .ToList();
 
+                DeviceSpecies.ItemsSource = species;
                 DeviceType.ItemsSource = types;
             }
         }
@@ -53,6 +57,7 @@ namespace MetryxWPF
                 {
                     Name = DeviceName.Text,
                     Typeid = (int)DeviceType.SelectedValue,
+                    Speciesid = (int)DeviceSpecies.SelectedValue,
                     Serialnumber = DeviceSerialNumber.Text,
                     Releasedate = DateOnly.FromDateTime(DeviceReleaseDate.SelectedDate.Value.Date),
                     Lastverificationdate = DateOnly.FromDateTime(DeviceLastverificationDate.SelectedDate.Value.Date)
@@ -70,6 +75,42 @@ namespace MetryxWPF
         public void CancelButton_Click( object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+        }
+        private bool _isUpdatingControls;
+        private void DeviceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isUpdatingControls)
+                return;
+            if (DeviceType.SelectedValue == null)
+                return;
+
+            int typeId = (int)DeviceType.SelectedValue;
+
+            using (var db = new PostgresContext())
+            {
+                var type = db.Devicetypes
+                            .FirstOrDefault(t => t.Id == typeId);
+                if (type != null)
+                    _isUpdatingControls = true;
+                    DeviceSpecies.SelectedValue = type.Speciesid;
+                    _isUpdatingControls = false;
+            }
+        }
+
+        private void DeviceSpecies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isUpdatingControls)
+                return;
+
+            if (DeviceSpecies.SelectedValue == null)
+                return;
+            using (var db = new PostgresContext())
+            {
+                var types = db.Devicetypes
+                            .Where(s => s.Speciesid == (int)DeviceSpecies.SelectedValue)
+                            .ToList();
+                DeviceType.ItemsSource = types;
+            }
         }
     }
 }

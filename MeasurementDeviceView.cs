@@ -15,13 +15,15 @@ namespace MetryxWPF
 
         public string Serialnumber { get; set; }
 
-        public int? Verificationinterval { get; set; }
+        public string SpeciesName { get; set; }
 
         public DateOnly Lastverificationdate { get; set; }
 
         public DateOnly? Nextverificationdate { get; set; }
 
         public VerificationStatus VerificationStatus { get; set; }
+
+        public bool? Suitable { get; set; }
     }
     
     public enum VerificationStatus

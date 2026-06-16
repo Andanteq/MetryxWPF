@@ -90,15 +90,17 @@ public partial class MainWindow : System.Windows.Window
         {
             return db.Measurementdevices
                      .Include(d => d.Type)
+                     .Include(d => d.Species)
                      .Select(d => new MeasurementDeviceView
                      {
                          Id = d.Id,
                          Name = d.Name,
                          TypeName = d.Type.Name,
+                         SpeciesName = d.Species.Name,
                          Serialnumber = d.Serialnumber,
-                         Verificationinterval = d.Verificationinterval,
                          Lastverificationdate = d.Lastverificationdate,
-                         Nextverificationdate = d.Nextverificationdate
+                         Nextverificationdate = d.Nextverificationdate,
+                         Suitable = d.Suitable
                      })
                      .ToList();
         }
@@ -112,6 +114,7 @@ public partial class MainWindow : System.Windows.Window
             {
                 return db.Measurementdevices
                          .Include(d => d.Type)
+                         .Include(d => d.Species)
                          .Where(d =>
                             (EF.Functions.ILike(d.Name, $"%{searchQuery}%") ||
                             EF.Functions.ILike(d.Serialnumber, $"%{searchQuery}%")) &&
@@ -122,9 +125,10 @@ public partial class MainWindow : System.Windows.Window
                              Name = d.Name,
                              TypeName = d.Type.Name,
                              Serialnumber = d.Serialnumber,
-                             Verificationinterval = d.Verificationinterval,
+                             SpeciesName = d.Species.Name,
                              Lastverificationdate = d.Lastverificationdate,
-                             Nextverificationdate = d.Nextverificationdate
+                             Nextverificationdate = d.Nextverificationdate,
+                             Suitable = d.Suitable
                          })
                          .ToList();
             }
@@ -132,6 +136,7 @@ public partial class MainWindow : System.Windows.Window
             {
                 return db.Measurementdevices
                          .Include(d => d.Type)
+                         .Include(d => d.Species)
                          .Where(d =>
                             EF.Functions.ILike(d.Name, $"%{searchQuery}%") ||
                             EF.Functions.ILike(d.Serialnumber, $"%{searchQuery}%"))
@@ -141,9 +146,10 @@ public partial class MainWindow : System.Windows.Window
                              Name = d.Name,
                              TypeName = d.Type.Name,
                              Serialnumber = d.Serialnumber,
-                             Verificationinterval = d.Verificationinterval,
+                             SpeciesName = d.Species.Name,
                              Lastverificationdate = d.Lastverificationdate,
-                             Nextverificationdate = d.Nextverificationdate
+                             Nextverificationdate = d.Nextverificationdate,
+                             Suitable = d.Suitable
                          })
                          .ToList();
             }
@@ -152,15 +158,17 @@ public partial class MainWindow : System.Windows.Window
                 return db.Measurementdevices
                          .Where(d => d.Typeid == id)
                          .Include(d => d.Type)
+                         .Include(d => d.Species)
                          .Select(d => new MeasurementDeviceView
                          {
                              Id = d.Id,
                              Name = d.Name,
                              TypeName = d.Type.Name,
                              Serialnumber = d.Serialnumber,
-                             Verificationinterval = d.Verificationinterval,
+                             SpeciesName = d.Species.Name,
                              Lastverificationdate = d.Lastverificationdate,
-                             Nextverificationdate = d.Nextverificationdate
+                             Nextverificationdate = d.Nextverificationdate,
+                             Suitable = d.Suitable
                          })
                          .ToList();
             }
@@ -224,6 +232,7 @@ public partial class MainWindow : System.Windows.Window
         {
             return db.Measurementdevices
                    .Include(d => d.Type)
+                   .Include(d => d.Species)
                    .AsEnumerable()
                    .Select(d =>
                    {
@@ -243,10 +252,11 @@ public partial class MainWindow : System.Windows.Window
                            Name = d.Name,
                            TypeName = d.Type.Name,
                            Serialnumber = d.Serialnumber,
-                           Verificationinterval = d.Verificationinterval,
+                           SpeciesName = d.Species.Name,
                            Lastverificationdate = d.Lastverificationdate,
                            Nextverificationdate = d.Nextverificationdate,
                            VerificationStatus = status,
+                           Suitable = d.Suitable,
                        }; 
                    })
                    .ToList();
@@ -260,6 +270,7 @@ public partial class MainWindow : System.Windows.Window
             {
                 var device = db.Measurementdevices
                     .Include(d => d.Type)
+                    .Include(d => d.Species)
                     .FirstOrDefault(d => d.Id == selectedDevice.Id);
 
                 if (device != null)
@@ -360,6 +371,7 @@ public partial class MainWindow : System.Windows.Window
 
     #region Типы
     private ObservableCollection<Devicetype> _types;
+    private List<Species> _species;
 
     private void LoadTypes()
     {
@@ -367,9 +379,11 @@ public partial class MainWindow : System.Windows.Window
         {
             _types = new ObservableCollection<Devicetype>(
                 db.Devicetypes.OrderBy(t => t.Name).ToList());
+            _species = db.Species.ToList();
 
             TypesGrid.ItemsSource = _types;
         }
+        ((CollectionViewSource)FindResource("SpeciesSource")).Source = _species;
     }
     private void AddTypeButton_Click(object sender, RoutedEventArgs e)
     {
@@ -489,6 +503,16 @@ public partial class MainWindow : System.Windows.Window
     }
     private void AddVerificationButton_Click(object sender, RoutedEventArgs e)
     {
+        int count = 0;
+        using(var db = new PostgresContext())
+        {
+            count = db.Measurementdevices.Count();
+        }
+        if(count == 0)
+        {
+            System.Windows.MessageBox.Show("Невозможно добавить протокол т.к. в базе отсутствуют приборы");
+            return;
+        }
         Verification verification = new Verification();
         VerificationWindow window = new VerificationWindow(verification);
         window.Owner = this;
