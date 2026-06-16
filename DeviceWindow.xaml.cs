@@ -235,16 +235,5 @@ namespace MetryxWPF
                 DeviceType.ItemsSource = types;
             }
         }
-
-        private void DeviceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            using(var db = new PostgresContext())
-            {
-                Devicetype type = db.Devicetypes
-                            .Where(t => t.Id == DeviceType.SelectedIndex) as Devicetype;
-
-                DeviceSpecies.SelectedValue = type.Speciesid;
-            }
-        }
     }
 }

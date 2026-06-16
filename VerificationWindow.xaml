@@ -230,7 +230,8 @@
                       Grid.Row="2" Grid.Column="0"
                       Margin="14, 15, 0, 0"
                       IsThreeState="False" FontWeight="DemiBold"
-                      Height="20" Content="Пригодность"/>
+                      Height="20" Content="Пригодность"
+                      IsChecked="{Binding Suitable}"/>
         </Grid>
         <Grid Grid.Row="4" Grid.Column="0">
             <Grid.RowDefinitions>

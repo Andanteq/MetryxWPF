@@ -76,5 +76,41 @@ namespace MetryxWPF
         {
             DialogResult = false;
         }
+        private bool _isUpdatingControls;
+        private void DeviceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isUpdatingControls)
+                return;
+            if (DeviceType.SelectedValue == null)
+                return;
+
+            int typeId = (int)DeviceType.SelectedValue;
+
+            using (var db = new PostgresContext())
+            {
+                var type = db.Devicetypes
+                            .FirstOrDefault(t => t.Id == typeId);
+                if (type != null)
+                    _isUpdatingControls = true;
+                    DeviceSpecies.SelectedValue = type.Speciesid;
+                    _isUpdatingControls = false;
+            }
+        }
+
+        private void DeviceSpecies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isUpdatingControls)
+                return;
+
+            if (DeviceSpecies.SelectedValue == null)
+                return;
+            using (var db = new PostgresContext())
+            {
+                var types = db.Devicetypes
+                            .Where(s => s.Speciesid == (int)DeviceSpecies.SelectedValue)
+                            .ToList();
+                DeviceType.ItemsSource = types;
+            }
+        }
     }
 }

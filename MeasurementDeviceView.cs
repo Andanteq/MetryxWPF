@@ -22,6 +22,8 @@ namespace MetryxWPF
         public DateOnly? Nextverificationdate { get; set; }
 
         public VerificationStatus VerificationStatus { get; set; }
+
+        public bool? Suitable { get; set; }
     }
     
     public enum VerificationStatus

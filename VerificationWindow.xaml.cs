@@ -51,10 +51,17 @@ namespace MetryxWPF
             {
                 var types = db.Verificationtypes.ToList();
                 VType.ItemsSource = types;
+
+                var device = db.Measurementdevices
+                            .FirstOrDefault(d => d.Id == verification.Measurementdeviceid);
+
+                if (device != null)
+                {
+                    DeviceTextBox.Text = device.Name;
+                    DeviceSerialNumber.Text = device.Serialnumber;
+                }
             }
             _selectedDeviceId = verification.Measurementdeviceid;
-            DeviceTextBox.Text = verification.Measurementdevice.Name;
-            DeviceSerialNumber.Text = verification.Measurementdevice.Serialnumber;
             VType.SelectedValue = verification.Verificationtypeid;
             Verificationdate.SelectedDate = verification.Verificationdate.ToDateTime(TimeOnly.MinValue);
             Nextverificationdate.SelectedDate = verification.Nextverificationdate.ToDateTime(TimeOnly.MinValue);

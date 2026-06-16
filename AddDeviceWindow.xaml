@@ -59,7 +59,7 @@
                       hc:BorderElement.CornerRadius="7" 
                       BorderBrush="#c7c7c9" Background="#FFE0E0E0"
                       DisplayMemberPath="Name"
-                      SelectedValuePath="Id"/>
+                      SelectedValuePath="Id" SelectionChanged="DeviceType_SelectionChanged"/>
         </StackPanel>
         <StackPanel Grid.Row="3">
             <TextBlock FontSize="12" FontWeight="DemiBold" 
@@ -71,7 +71,7 @@
                       hc:BorderElement.CornerRadius="7" 
                       BorderBrush="#c7c7c9" Background="#FFE0E0E0"
                       DisplayMemberPath="Name"
-                      SelectedValuePath="Id"/>
+                      SelectedValuePath="Id" SelectionChanged="DeviceSpecies_SelectionChanged"/>
         </StackPanel>
         <StackPanel Grid.Row="4">
             <TextBlock FontSize="12" FontWeight="DemiBold" 
